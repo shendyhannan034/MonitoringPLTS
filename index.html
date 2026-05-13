@@ -22,8 +22,8 @@
                 background: linear-gradient(135deg,#000000, #0f172a, #2563eb);
                 color: white;
                 display: flex;
-                height: 100vh;
-                overflow: hidden;
+                min-height: 100vh;
+                overflow-x: hidden;
             }
             /* ================= SIDEBAR ================= */
             .sidebar {
@@ -896,13 +896,17 @@
                 .sidebar {
                     width: 100%;
                     flex-direction: row;
-                    justify-content: center;
+                    justify-content: flex-start;
                     align-items: center;
                     gap: 10px;
                     padding: 10px;
                     overflow-x: auto;
+                    overflow-y: hidden;
+                    white-space: nowrap;
                 }
-
+                    .sidebar::-webkit-scrollbar {
+                        display: none;
+                    }
                 .logo {
                     display: none;
                 }
@@ -926,9 +930,11 @@
                 }
 
                 .menu-btn {
-                    min-width: 100px;
+                    width: auto;
+                    min-width: 110px;
+                    flex-shrink: 0;
                     font-size: 16px;
-                    padding: 15px;
+                    padding: 12px 18px;
                 }
 
                 .value {
