@@ -25,6 +25,61 @@
                 min-height: 100vh;
                 overflow-x: hidden;
             }
+            /* ================= LOGIN POPUP ================= */
+
+            .login-popup {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                display: none;
+                justify-content: center;
+                align-items: center;
+                z-index: 99999;
+            }
+
+            .login-box {
+                width: 350px;
+                padding: 30px;
+                border-radius: 24px;
+                background: linear-gradient( 135deg, #0f172a, #1e293b );
+                box-shadow: 0 0 30px rgba(0,255,255,0.15);
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+            }
+
+                .login-box h2 {
+                    text-align: center;
+                    color: cyan;
+                    margin-bottom: 10px;
+                }
+
+                .login-box input {
+                    padding: 15px;
+                    border: none;
+                    border-radius: 14px;
+                    background: rgba(255,255,255,0.08);
+                    color: white;
+                    font-size: 16px;
+                }
+
+                .login-box button {
+                    padding: 15px;
+                    border: none;
+                    border-radius: 14px;
+                    background: linear-gradient( 135deg, #2563eb, #1d4ed8 );
+                    color: white;
+                    font-size: 16px;
+                    font-weight: bold;
+                    cursor: pointer;
+                }
+
+            .close-btn {
+                background: linear-gradient( 135deg, #ef4444, #dc2626 ) !important;
+            }
             /* ================= SIDEBAR ================= */
             .sidebar {
                 width: 250px;
@@ -339,6 +394,11 @@
                 font-size: 16px;
                 transition: 0.3s;
             }
+                input:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                    background: rgba(100,100,100,0.3);
+                }
 
                 input:focus,
                 select:focus {
@@ -370,6 +430,23 @@
                 border: 1px solid rgba(255,255,255,0.06);
                 box-shadow: inset 0 0 10px rgba(0,255,255,0.03);
             }
+            .setting-button {
+                width: 100%;
+                padding: 18px;
+                border: none;
+                border-radius: 18px;
+                cursor: pointer;
+                font-size: 18px;
+                color: white;
+                background: linear-gradient( 145deg, #1e293b, #0f172a );
+                transition: 0.3s;
+                box-shadow: 0 0 10px rgba(0,255,255,0.05);
+            }
+
+                .setting-button:hover {
+                    background: linear-gradient( 145deg, #2563eb, #1d4ed8 );
+                    transform: translateY(-3px);
+                }
             /* ================= LOGOUT ================= */
 
             .logout-container {
@@ -788,6 +865,25 @@
                     transform: scale(1.08);
                     box-shadow: 0 0 40px cyan;
                 }
+            #loginButton {
+                display: none;
+                margin-top: 15px;
+                width: 220px;
+                padding: 16px;
+                border: none;
+                border-radius: 18px;
+                background: linear-gradient( 135deg, #f59e0b, #d97706 );
+                color: white;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: 0.3s;
+                box-shadow: 0 0 20px rgba(245,158,11,0.3);
+            }
+
+                #loginButton:hover {
+                    transform: scale(1.05);
+                }
 
             /* RESPONSIVE */
 
@@ -818,188 +914,6 @@
                     to {
                         top: 100px;
                     }
-                }
-            }
-            /* ========================================================= */
-            /* ================= MOBILE FIX ============================ */
-            /* ========================================================= */
-
-            @media screen and (max-width: 768px) {
-
-                #loadingScreen {
-                    overflow-y: auto;
-                    padding: 30px 15px;
-                }
-
-                .loading-container {
-                    width: 100%;
-                    transform: scale(0.9);
-                }
-
-                .loading-title {
-                    font-size: 38px;
-                    line-height: 1.2;
-                    text-align: center;
-                }
-
-                .loading-subtitle {
-                    font-size: 14px;
-                    margin-bottom: 40px;
-                    padding: 0 10px;
-                }
-
-                .energy-flow {
-                    flex-direction: column;
-                    gap: 20px;
-                }
-
-                .energy-card {
-                    width: 150px;
-                    height: 150px;
-                }
-
-                .energy-icon {
-                    font-size: 60px;
-                }
-
-                .energy-name {
-                    font-size: 20px;
-                }
-
-                .energy-line {
-                    width: 8px;
-                    height: 70px;
-                }
-
-                    .energy-line::before {
-                        width: 100%;
-                        height: 30px;
-                    }
-
-                #startButton {
-                    width: 180px;
-                    font-size: 20px;
-                    padding: 16px 20px;
-                }
-            }
-            /* ========================================================= */
-            /* ================= MOBILE DASHBOARD ====================== */
-            /* ========================================================= */
-            @media screen and (max-width:768px) {
-
-                body {
-                    flex-direction: column;
-                    overflow-x: hidden;
-                    height: auto;
-                }
-
-                .sidebar {
-                    width: 100%;
-                    flex-direction: row;
-                    justify-content: flex-start;
-                    align-items: center;
-                    gap: 10px;
-                    padding: 10px;
-                    overflow-x: auto;
-                    overflow-y: hidden;
-                    white-space: nowrap;
-                }
-                    .sidebar::-webkit-scrollbar {
-                        display: none;
-                    }
-                .logo {
-                    display: none;
-                }
-
-                .content {
-                    width: 100%;
-                    padding: 15px;
-                    overflow-x: hidden;
-                }
-
-                .cards {
-                    grid-template-columns: 1fr;
-                }
-
-                .stats-container {
-                    grid-template-columns: 1fr 1fr;
-                }
-
-                .gauge-container {
-                    grid-template-columns: 1fr;
-                }
-
-                .menu-btn {
-                    width: auto;
-                    min-width: 110px;
-                    flex-shrink: 0;
-                    font-size: 16px;
-                    padding: 12px 18px;
-                }
-
-                .value {
-                    font-size: 42px;
-                }
-
-                .gauge-value {
-                    font-size: 30px;
-                }
-
-                .section-title {
-                    font-size: 32px;
-                    text-align: center;
-                }
-
-                .datetime-box {
-                    width: 100%;
-                    justify-content: center;
-                }
-
-                table {
-                    font-size: 12px;
-                }
-
-                th, td {
-                    padding: 10px;
-                }
-
-                .loading-title {
-                    font-size: 40px;
-                    line-height: 1.2;
-                }
-
-                .energy-flow {
-                    flex-direction: column;
-                    gap: 20px;
-                }
-
-                .energy-line {
-                    width: 8px;
-                    height: 70px;
-                }
-
-                    .energy-line::before {
-                        width: 100%;
-                        height: 30px;
-                        background: linear-gradient( 180deg, transparent, cyan, transparent );
-                    }
-
-                .energy-card {
-                    width: 160px;
-                    height: 160px;
-                }
-
-                .energy-icon {
-                    font-size: 60px;
-                }
-
-                .energy-name {
-                    font-size: 20px;
-                }
-
-                #loadingScreen {
-                    overflow-y: auto;
-                    padding: 30px 15px;
                 }
             }
            
@@ -1098,6 +1012,46 @@
                         onclick="startDashboard()">
 
                     START
+
+                </button>
+                <button id="loginButton">
+
+                    🔒 LOGIN ADMIN
+
+                </button>
+
+            </div>
+
+        </div>
+        <!-- ================= LOGIN POPUP ================= -->
+
+        <div id="loginPopup"
+             class="login-popup">
+
+            <div class="login-box">
+
+                <h2>
+                    Login Admin
+                </h2>
+
+                <input type="text"
+                       id="adminUsername"
+                       placeholder="Username">
+
+                <input type="password"
+                       id="adminPassword"
+                       placeholder="Password">
+
+                <button onclick="loginAdmin()">
+
+                    LOGIN
+
+                </button>
+
+                <button onclick="closeLogin()"
+                        class="close-btn">
+
+                    BATAL
 
                 </button>
 
@@ -1459,9 +1413,9 @@
 
             </div>
 
-                <!-- ========================================================= -->
-                <!-- ================= SETTINGS PAGE ========================= -->
-                <!-- ========================================================= -->
+            <!-- ========================================================= -->
+            <!-- ================= SETTINGS PAGE ========================= -->
+            <!-- ========================================================= -->
 
             <div id="settings" class="page">
 
@@ -1471,7 +1425,7 @@
 
                 <!-- MODE -->
 
-                <div class="setting-group">
+                <div class="setting-group"id="systemLimitGroup">
 
                     <div class="setting-text">
                         🎨 Tampilan
@@ -1554,26 +1508,26 @@
 
                 <div class="setting-group">
 
-                    <div class="setting-text">
+                    <div class="setting-text adminOnly">
                         🗑️ Reset Data
                     </div>
 
-                    <div class="setting-item">
+                    <div class="setting-item adminOnly">
 
                         <label>Reset Statistik</label>
 
-                        <button class="menu-btn"
+                        <button class="setting-button adminOnly"
                                 onclick="resetStatistics()">
                             Reset Statistik
                         </button>
 
                     </div>
 
-                    <div class="setting-item">
+                    <div class="setting-item adminOnly">
 
                         <label>Reset Data Abnormal</label>
 
-                        <button class="menu-btn"
+                        <button class="setting-button adminOnly"
                                 onclick="resetAbnormalHistory()">
                             Reset Abnormal
                         </button>
@@ -1628,7 +1582,7 @@
 
             </div>
 
-            </div>
+        </div>
 
         <!-- ========================================================= -->
         <!-- ================= JAVASCRIPT ============================ -->
@@ -1663,53 +1617,117 @@
             /* ================= SAVE SETTINGS ========================= */
             /* ========================================================= */
 
-            function saveSettings() {
+            async function saveSettings() {
 
-                localStorage.setItem(
-                    "minVoltage",
-                    document.getElementById("minVoltage").value
-                );
+                try {
 
-                localStorage.setItem(
-                    "maxVoltage",
-                    document.getElementById("maxVoltage").value
-                );
+                    // ================= AMBIL INPUT =================
 
-                localStorage.setItem(
-                    "maxCurrent",
-                    document.getElementById("maxCurrent").value
-                );
+                    const minVoltageValue =
+                        parseFloat(
+                            document.getElementById("minVoltage").value
+                        );
+
+                    const maxVoltageValue =
+                        parseFloat(
+                            document.getElementById("maxVoltage").value
+                        );
+
+                    const maxCurrentValue =
+                        parseFloat(
+                            document.getElementById("maxCurrent").value
+                        );
+
+                    // ================= UPDATE VARIABLE =================
+
+                    minVoltage = minVoltageValue;
+                    maxVoltage = maxVoltageValue;
+                    maxCurrent = maxCurrentValue;
+
+                    // ================= SAVE KE FIREBASE =================
+
+                    await fetch(urlSettings, {
+
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            minVoltage: minVoltageValue,
+                            maxVoltage: maxVoltageValue,
+                            maxCurrent: maxCurrentValue
+
+                        })
+
+                    });
+
+                    // ================= ALERT =================
+
+                    alert(
+                        "Batas sistem berhasil diperbarui"
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.log(
+                        "Gagal save settings:",
+                        error
+                    );
+
+                    alert(
+                        "Gagal menyimpan settings"
+                    );
+
+                }
 
             }
-            function loadSettings() {
+            async function loadSettings() {
 
-                const savedMinVoltage =
-                    localStorage.getItem("minVoltage");
+                try {
 
-                const savedMaxVoltage =
-                    localStorage.getItem("maxVoltage");
+                    const response =
+                        await fetch(urlSettings);
 
-                const savedMaxCurrent =
-                    localStorage.getItem("maxCurrent");
+                    const settings =
+                        await response.json();
 
-                if (savedMinVoltage !== null) {
+                    if (!settings) return;
+
+                    // ================= INPUT =================
 
                     document.getElementById("minVoltage")
-                        .value = savedMinVoltage;
-
-                }
-
-                if (savedMaxVoltage !== null) {
+                        .value = settings.minVoltage;
 
                     document.getElementById("maxVoltage")
-                        .value = savedMaxVoltage;
+                        .value = settings.maxVoltage;
+
+                    document.getElementById("maxCurrent")
+                        .value = settings.maxCurrent;
+
+                    // ================= GAUGE =================
+
+                    minVoltage =
+                        parseFloat(settings.minVoltage);
+
+                    maxVoltage =
+                        parseFloat(settings.maxVoltage);
+
+                    maxCurrent =
+                        parseFloat(settings.maxCurrent);
 
                 }
 
-                if (savedMaxCurrent !== null) {
+                catch (error) {
 
-                    document.getElementById("maxCurrent")
-                        .value = savedMaxCurrent;
+                    console.log(
+                        "Gagal load settings:",
+                        error
+                    );
 
                 }
 
@@ -1853,7 +1871,7 @@
                             label: label,
                             data: data,
                             borderColor: lineColor,
-                            backgroundColor:fillColor,
+                            backgroundColor: fillColor,
                             borderWidth: 3,
                             tension: 0.4,
                             fill: true,
@@ -1861,7 +1879,7 @@
                             pointHoverRadius: 7,
                             pointBackgroundColor: lineColor,
                             pointBorderColor: lineColor,
-                            pointHoverBackgroundColor:'#ffffff'
+                            pointHoverBackgroundColor: '#ffffff'
                         }]
                     },
                     options: {
@@ -1912,8 +1930,8 @@
                 });
             }
 
-            const powerChart =createChart("powerChart","Daya",powerData,"#38bdf8","rgba(56,189,248,0.12)");
-            const energyChart = createChart("energyChart","Energi",energyData,"#22c55e","rgba(34,197,94,0.12)");
+            const powerChart = createChart("powerChart", "Daya", powerData, "#38bdf8", "rgba(56,189,248,0.12)");
+            const energyChart = createChart("energyChart", "Energi", energyData, "#22c55e", "rgba(34,197,94,0.12)");
 
             /* ========================================================= */
             /* ================= FIREBASE ============================== */
@@ -1924,6 +1942,15 @@
 
             const urlHistory =
                 "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/History.json";
+
+            const urlSettings =
+                "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/settings.json";
+
+            const urlReset =
+                "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/reset.json";
+
+            const urlAdmin =
+                "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/admin.json";
             /* ========================================================= */
             /* ================= REALTIME DATA ========================= */
             /* ========================================================= */
@@ -2202,34 +2229,34 @@
                         .title = "Tercatat: " + maxPowerTime;
 
                     localStorage.setItem(
-                        "maxVoltageStat",maxVoltageValue
+                        "maxVoltageStat", maxVoltageValue
                     );
 
                     localStorage.setItem(
-                        "minVoltageStat",minVoltageValue
+                        "minVoltageStat", minVoltageValue
                     );
 
                     localStorage.setItem(
-                        "maxCurrentStat",maxCurrentValue
+                        "maxCurrentStat", maxCurrentValue
                     );
 
                     localStorage.setItem(
-                        "maxPowerStat",maxPowerValue
+                        "maxPowerStat", maxPowerValue
                     );
                     localStorage.setItem(
-                        "maxVoltageTime",maxVoltageTime
-                    );
-
-                    localStorage.setItem(
-                        "minVoltageTime",minVoltageTime
+                        "maxVoltageTime", maxVoltageTime
                     );
 
                     localStorage.setItem(
-                        "maxCurrentTime",maxCurrentTime
+                        "minVoltageTime", minVoltageTime
                     );
 
                     localStorage.setItem(
-                        "maxPowerTime",maxPowerTime
+                        "maxCurrentTime", maxCurrentTime
+                    );
+
+                    localStorage.setItem(
+                        "maxPowerTime", maxPowerTime
                     );
 
                     // ================= GAUGE ================= //
@@ -2343,9 +2370,9 @@
                 const abnormalData = {
                     waktu:
                         new Date().toLocaleString(),
-                    parameter:parameter,
-                    nilai:value,
-                    status:status
+                    parameter: parameter,
+                    nilai: value,
+                    status: status
                 };
 
                 // AMBIL DATA LAMA
@@ -2393,23 +2420,23 @@
 
                     row.innerHTML = `
 
-                <td>
-                    ${item.waktu}
-                </td>
+                        <td>
+                            ${item.waktu}
+                        </td>
 
-                <td>
-                    ${item.parameter}
-                </td>
+                        <td>
+                            ${item.parameter}
+                        </td>
 
-                <td>
-                    ${item.nilai}
-                </td>
+                        <td>
+                            ${item.nilai}
+                        </td>
 
-                <td class="status-danger">
-                    ${item.status}
-                </td>
+                        <td class="status-danger">
+                            ${item.status}
+                        </td>
 
-            `;
+                    `;
 
                 });
 
@@ -2421,7 +2448,7 @@
 
             let historyLevel = "daily";
             let selectedDate = "";
-
+            let adminMode = false;
             /* ================= HARIAN ================= */
 
             async function loadDailyHistory() {
@@ -2495,25 +2522,25 @@
 
                         row.innerHTML = `
 
-                    <td>${date}</td>
+                            <td>${date}</td>
 
-                    <td>
-                        ${avgVoltage.toFixed(1)} V
-                    </td>
+                            <td>
+                                ${avgVoltage.toFixed(1)} V
+                            </td>
 
-                    <td>
-                        ${avgCurrent.toFixed(2)} A
-                    </td>
+                            <td>
+                                ${avgCurrent.toFixed(2)} A
+                            </td>
 
-                    <td>
-                        ${avgPower.toFixed(1)} W
-                    </td>
+                            <td>
+                                ${avgPower.toFixed(1)} W
+                            </td>
 
-                    <td>
-                       ${lastEnergy.toFixed(2)} kWh
-                    </td>
+                            <td>
+                               ${lastEnergy.toFixed(2)} kWh
+                            </td>
 
-                `;
+                        `;
 
                         row.onclick = () => {
 
@@ -2542,7 +2569,7 @@
                 selectedDate = date;
 
                 document.getElementById("historyTitle")
-                    .innerText =`Riwayat Per Jam (${date})`;
+                    .innerText = `Riwayat Per Jam (${date})`;
                 document.getElementById("backButton")
                     .style.display = "block";
                 const table =
@@ -2608,25 +2635,25 @@
 
                         row.innerHTML = `
 
-                    <td>${hour}:00</td>
+                            <td>${hour}:00</td>
 
-                    <td>
-                        ${(item.voltage / item.count).toFixed(1)} V
-                    </td>
+                            <td>
+                                ${(item.voltage / item.count).toFixed(1)} V
+                            </td>
 
-                    <td>
-                        ${(item.current / item.count).toFixed(2)} A
-                    </td>
+                            <td>
+                                ${(item.current / item.count).toFixed(2)} A
+                            </td>
 
-                    <td>
-                        ${(item.power / item.count).toFixed(1)} W
-                    </td>
+                            <td>
+                                ${(item.power / item.count).toFixed(1)} W
+                            </td>
 
-                    <td>
-                        ${item.energy.toFixed(2)} kWh
-                    </td>
+                            <td>
+                                ${item.energy.toFixed(2)} kWh
+                            </td>
 
-                `;
+                        `;
 
                         row.onclick = () => {
 
@@ -2653,7 +2680,7 @@
                 historyLevel = "detail";
 
                 document.getElementById("historyTitle")
-                    .innerText =`Riwayat Per 15 Detik (${date} | ${hour}:00)`;
+                    .innerText = `Riwayat Per 15 Detik (${date} | ${hour}:00)`;
                 document.getElementById("backButton")
                     .style.display = "block";
 
@@ -2675,7 +2702,7 @@
                     const dayData =
                         data[date];
 
-                    Object.keys(dayData).sort((a, b) => b.localeCompare(a)) .forEach(time => {
+                    Object.keys(dayData).sort((a, b) => b.localeCompare(a)).forEach(time => {
 
                         if (time.substring(0, 2) === hour) {
 
@@ -2687,25 +2714,25 @@
 
                             row.innerHTML = `
 
-                        <td>${time}</td>
+                                <td>${time}</td>
 
-                        <td>
-                            ${item.tegangan} V
-                        </td>
+                                <td>
+                                    ${item.tegangan} V
+                                </td>
 
-                        <td>
-                            ${item.arus} A
-                        </td>
+                                <td>
+                                    ${item.arus} A
+                                </td>
 
-                        <td>
-                            ${item.daya} W
-                        </td>
+                                <td>
+                                    ${item.daya} W
+                                </td>
 
-                        <td>
-                            ${item.energi} kWh
-                        </td>
+                                <td>
+                                    ${item.energi} kWh
+                                </td>
 
-                    `;
+                            `;
 
                         }
 
@@ -2900,19 +2927,167 @@
 
                 document.getElementById("startButton")
                     .style.display = "inline-block";
+                document.getElementById("loginButton")
+                    .style.display = "inline-block";
+                document
+                    .querySelectorAll(".adminOnly")
+                    .forEach(item => {
 
+                        item.style.display = "none";
+
+                    });
+
+                document
+                    .getElementById("loginButton")
+                    .addEventListener("click", () => {
+
+                        document
+                            .getElementById("loginPopup")
+                            .style.display = "flex";
+
+                    });
+                
             }, 4000);
+            async function loginAdmin() {
+
+                const username =
+                    document.getElementById("adminUsername").value;
+
+                const password =
+                    document.getElementById("adminPassword").value;
+
+                try {
+
+                    const response =
+                        await fetch(urlAdmin);
+
+                    const admin =
+                        await response.json();
+
+                    if (
+                        username === admin.username &&
+                        password === admin.password
+                    ) {
+
+                        adminMode = true;
+
+                        // ENABLE INPUT ADMIN
+                        document.getElementById("minVoltage")
+                            .disabled = false;
+
+                        document.getElementById("maxVoltage")
+                            .disabled = false;
+
+                        document.getElementById("maxCurrent")
+                            .disabled = false;
+
+                        document
+                            .querySelectorAll(".adminOnly")
+                            .forEach(item => {
+
+                                item.style.display = "flex";
+
+                            });
+
+                        closeLogin();
+
+                        // MASUK DASHBOARD
+                        document.getElementById("loadingScreen")
+                            .style.display = "none";
+
+                        // TAMPIL HALAMAN REALTIME
+                        showPage("realtime");
+
+                        // KOSONGKAN INPUT
+                        document.getElementById("adminUsername")
+                            .value = "";
+
+                        document.getElementById("adminPassword")
+                            .value = "";
+
+                        alert("Login berhasil!");
+
+                    }
+
+                    else {
+
+                        alert("Username atau password salah!");
+
+                    }
+
+                }
+
+                catch (error) {
+
+                    console.log(error);
+
+                    alert("Gagal login");
+
+                }
+
+            }
+            function closeLogin() {
+
+                document
+                    .getElementById("loginPopup")
+                    .style.display = "none";
+
+            }
 
             function startDashboard() {
 
+                // VIEW MODE
+                adminMode = false;
+
+                // HIDE ADMIN MENU
+                document
+                    .querySelectorAll(".adminOnly")
+                    .forEach(item => {
+
+                        item.style.display = "none";
+
+                    });
+
+                // MASUK DASHBOARD
                 document.getElementById("loadingScreen")
                     .style.display = "none";
-                    showPage("realtime");
+
+                // DISABLE INPUT VIEWER
+                document.getElementById("minVoltage")
+                    .disabled = true;
+
+                document.getElementById("maxVoltage")
+                    .disabled = true;
+
+                document.getElementById("maxCurrent")
+                    .disabled = true;
+
+                showPage("realtime");
 
             }
 
             function logoutDashboard() {
 
+                // KEMBALI KE VIEW MODE
+                adminMode = false;
+
+                // SEMBUNYIKAN TOMBOL ADMIN
+                document
+                    .querySelectorAll(".adminOnly")
+                    .forEach(item => {
+
+                        item.style.display = "none";
+
+                    });
+
+                // KOSONGKAN INPUT LOGIN
+                document.getElementById("adminUsername")
+                    .value = "";
+
+                document.getElementById("adminPassword")
+                    .value = "";
+
+                // TAMPILKAN LOADING SCREEN
                 document.getElementById("loadingScreen")
                     .style.display = "flex";
 
