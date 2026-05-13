@@ -837,6 +837,59 @@
                 }
             }
         }
+        /* ========================================================= */
+        /* ================= MOBILE RESPONSIVE ===================== */
+        /* ========================================================= */
+
+        @media (max-width: 768px) {
+
+            .energy-flow {
+                flex-direction: column;
+                gap: 25px;
+                transform: scale(0.9);
+            }
+
+            .energy-line {
+                width: 8px;
+                height: 100px;
+            }
+
+                .energy-line::before {
+                    width: 100%;
+                    height: 35px;
+                }
+
+            .energy-card {
+                width: 180px;
+                height: 180px;
+            }
+
+            .energy-icon {
+                font-size: 70px;
+            }
+
+            .energy-name {
+                font-size: 20px;
+            }
+
+            .main-title {
+                font-size: 40px;
+                text-align: center;
+                line-height: 1.2;
+            }
+
+            .subtitle {
+                font-size: 14px;
+                text-align: center;
+                padding: 0 20px;
+            }
+
+            .start-btn {
+                width: 180px;
+                height: 55px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 
