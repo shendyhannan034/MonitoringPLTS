@@ -396,23 +396,6 @@
 
             /* ================= RESPONSIVE ================= */
 
-            @media(max-width:900px) {
-
-                body {
-                    flex-direction: column;
-                }
-
-                .sidebar {
-                    width: 100%;
-                    flex-direction: row;
-                    overflow-x: auto;
-                }
-
-                .content {
-                    height: 100%;
-                }
-            }
-
             .light-mode {
                 background: linear-gradient( 135deg, #eef4ff, #dbeafe, #bfdbfe );
                 color: #0f172a;
@@ -902,195 +885,118 @@
             /* ========================================================= */
             /* ================= MOBILE DASHBOARD ====================== */
             /* ========================================================= */
+            @media screen and (max-width:768px) {
 
-            @media screen and (max-width: 768px) {
-
-                /* BODY */
                 body {
+                    flex-direction: column;
                     overflow-x: hidden;
+                    height: auto;
                 }
 
-                /* SIDEBAR */
                 .sidebar {
                     width: 100%;
-                    height: auto;
-                    position: relative;
                     flex-direction: row;
                     justify-content: center;
-                    gap: 12px;
+                    align-items: center;
+                    gap: 10px;
                     padding: 10px;
-                    border-radius: 0 0 20px 20px;
+                    overflow-x: auto;
                 }
 
-                .logo-container {
+                .logo {
                     display: none;
                 }
 
-                /* MENU BUTTON */
-                .menu-btn {
-                    width: 100px;
-                    height: 80px;
-                    font-size: 16px;
-                    border-radius: 20px;
-                }
-
-                /* MAIN CONTENT */
-                .main-content {
-                    margin-left: 0;
-                    padding: 15px;
-                }
-
-                /* CLOCK */
-                .datetime-box {
+                .content {
                     width: 100%;
                     padding: 15px;
-                    border-radius: 20px;
-                }
-
-                .clock-time {
-                    font-size: 38px;
-                }
-
-                /* TITLE */
-                .section-title {
-                    font-size: 38px;
-                    text-align: center;
-                }
-
-                /* REALTIME CARD */
-                .card-container {
-                    grid-template-columns: 1fr;
-                    gap: 20px;
-                }
-
-                .card {
-                    width: 100%;
-                    min-height: 220px;
-                    border-radius: 28px;
-                }
-
-                .card-title {
-                    font-size: 28px;
-                }
-
-                .card-value {
-                    font-size: 52px;
-                }
-
-                /* STATISTIK */
-                .stats-container {
-                    grid-template-columns: 1fr 1fr;
-                    gap: 15px;
-                }
-
-                .stat-card {
-                    min-height: 120px;
-                }
-
-                /* GAUGE */
-                .gauge-container {
-                    grid-template-columns: 1fr;
-                }
-
-                .gauge-card {
-                    width: 100%;
-                    overflow: hidden;
-                }
-
-                /* TABLE */
-                table {
-                    font-size: 14px;
-                }
-
-                /* BUTTON */
-                button {
-                    font-size: 16px;
-                }
-            }
-            @media screen and (max-width: 768px) {
-
-                * {
-                    box-sizing: border-box;
-                }
-
-                body {
                     overflow-x: hidden;
                 }
 
-                /* ================= SIDEBAR ================= */
-
-                .sidebar {
-                    width: 100% !important;
-                    height: auto !important;
-                    position: relative !important;
-                    display: flex !important;
-                    flex-direction: row !important;
-                    justify-content: center !important;
-                    align-items: center !important;
-                    gap: 10px !important;
-                    padding: 12px !important;
+                .cards {
+                    grid-template-columns: 1fr;
                 }
 
-                .logo-container {
-                    display: none !important;
+                .stats-container {
+                    grid-template-columns: 1fr 1fr;
+                }
+
+                .gauge-container {
+                    grid-template-columns: 1fr;
                 }
 
                 .menu-btn {
-                    width: 100px !important;
-                    height: 80px !important;
-                    font-size: 18px !important;
+                    min-width: 100px;
+                    font-size: 16px;
+                    padding: 15px;
                 }
 
-                /* ================= MAIN ================= */
-
-                .main-content {
-                    margin-left: 0 !important;
-                    width: 100% !important;
-                    padding: 15px !important;
+                .value {
+                    font-size: 42px;
                 }
 
-                /* ================= REALTIME CARD ================= */
-
-                .card-container {
-                    display: grid !important;
-                    grid-template-columns: 1fr !important;
-                    gap: 20px !important;
+                .gauge-value {
+                    font-size: 30px;
                 }
 
-                .card {
-                    width: 100% !important;
-                    min-height: 200px !important;
+                .section-title {
+                    font-size: 32px;
+                    text-align: center;
                 }
-
-                .card-title {
-                    font-size: 26px !important;
-                }
-
-                .card-value {
-                    font-size: 48px !important;
-                }
-
-                /* ================= CLOCK ================= */
 
                 .datetime-box {
-                    width: 100% !important;
+                    width: 100%;
+                    justify-content: center;
                 }
 
-                /* ================= GAUGE ================= */
-
-                .gauge-container {
-                    display: grid !important;
-                    grid-template-columns: 1fr !important;
+                table {
+                    font-size: 12px;
                 }
 
-                .gauge-card {
-                    width: 100% !important;
+                th, td {
+                    padding: 10px;
                 }
 
-                canvas {
-                    max-width: 100% !important;
+                .loading-title {
+                    font-size: 40px;
+                    line-height: 1.2;
+                }
+
+                .energy-flow {
+                    flex-direction: column;
+                    gap: 20px;
+                }
+
+                .energy-line {
+                    width: 8px;
+                    height: 70px;
+                }
+
+                    .energy-line::before {
+                        width: 100%;
+                        height: 30px;
+                        background: linear-gradient( 180deg, transparent, cyan, transparent );
+                    }
+
+                .energy-card {
+                    width: 160px;
+                    height: 160px;
+                }
+
+                .energy-icon {
+                    font-size: 60px;
+                }
+
+                .energy-name {
+                    font-size: 20px;
+                }
+
+                #loadingScreen {
+                    overflow-y: auto;
+                    padding: 30px 15px;
                 }
             }
+           
         </style>
     </head>
 
