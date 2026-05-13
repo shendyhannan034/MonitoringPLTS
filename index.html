@@ -1007,6 +1007,90 @@
                     font-size: 16px;
                 }
             }
+            @media screen and (max-width: 768px) {
+
+                * {
+                    box-sizing: border-box;
+                }
+
+                body {
+                    overflow-x: hidden;
+                }
+
+                /* ================= SIDEBAR ================= */
+
+                .sidebar {
+                    width: 100% !important;
+                    height: auto !important;
+                    position: relative !important;
+                    display: flex !important;
+                    flex-direction: row !important;
+                    justify-content: center !important;
+                    align-items: center !important;
+                    gap: 10px !important;
+                    padding: 12px !important;
+                }
+
+                .logo-container {
+                    display: none !important;
+                }
+
+                .menu-btn {
+                    width: 100px !important;
+                    height: 80px !important;
+                    font-size: 18px !important;
+                }
+
+                /* ================= MAIN ================= */
+
+                .main-content {
+                    margin-left: 0 !important;
+                    width: 100% !important;
+                    padding: 15px !important;
+                }
+
+                /* ================= REALTIME CARD ================= */
+
+                .card-container {
+                    display: grid !important;
+                    grid-template-columns: 1fr !important;
+                    gap: 20px !important;
+                }
+
+                .card {
+                    width: 100% !important;
+                    min-height: 200px !important;
+                }
+
+                .card-title {
+                    font-size: 26px !important;
+                }
+
+                .card-value {
+                    font-size: 48px !important;
+                }
+
+                /* ================= CLOCK ================= */
+
+                .datetime-box {
+                    width: 100% !important;
+                }
+
+                /* ================= GAUGE ================= */
+
+                .gauge-container {
+                    display: grid !important;
+                    grid-template-columns: 1fr !important;
+                }
+
+                .gauge-card {
+                    width: 100% !important;
+                }
+
+                canvas {
+                    max-width: 100% !important;
+                }
+            }
         </style>
     </head>
 
