@@ -841,52 +841,66 @@
             /* ================= MOBILE RESPONSIVE ===================== */
             /* ========================================================= */
 
-            @media (max-width: 768px) {
+            /* ========================================================= */
+            /* ================= MOBILE FIX ============================ */
+            /* ========================================================= */
+
+            @media screen and (max-width: 768px) {
+
+                #loadingScreen {
+                    overflow-y: auto;
+                    padding: 30px 15px;
+                }
+
+                .loading-container {
+                    width: 100%;
+                    transform: scale(0.9);
+                }
+
+                .loading-title {
+                    font-size: 38px;
+                    line-height: 1.2;
+                    text-align: center;
+                }
+
+                .loading-subtitle {
+                    font-size: 14px;
+                    margin-bottom: 40px;
+                    padding: 0 10px;
+                }
 
                 .energy-flow {
                     flex-direction: column;
-                    gap: 25px;
+                    gap: 20px;
                 }
-
-                .energy-line {
-                    width: 8px;
-                    height: 100px;
-                }
-
-                    .energy-line::before {
-                        width: 100%;
-                        height: 35px;
-                    }
 
                 .energy-card {
-                    width: 180px;
-                    height: 180px;
+                    width: 150px;
+                    height: 150px;
                 }
 
                 .energy-icon {
-                    font-size: 70px;
+                    font-size: 60px;
                 }
 
                 .energy-name {
                     font-size: 20px;
                 }
 
-                .main-title {
-                    font-size: 40px;
-                    text-align: center;
-                    line-height: 1.2;
+                .energy-line {
+                    width: 8px;
+                    height: 70px;
                 }
 
-                .subtitle {
-                    font-size: 14px;
-                    text-align: center;
-                    padding: 0 20px;
-                }
+                    .energy-line::before {
+                        width: 100%;
+                        height: 30px;
+                    }
 
-                .start-btn {
+                #startButton {
                     width: 180px;
-                    height: 55px;
                     font-size: 20px;
+                    padding: 16px 20px;
                 }
             }
         </style>
