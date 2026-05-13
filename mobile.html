@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -9,6 +9,7 @@
     <!-- CHART JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-radial-gauge"></script>
+
     <style>
 
         * {
@@ -24,6 +25,61 @@
             display: flex;
             min-height: 100vh;
             overflow-x: hidden;
+        }
+        /* ================= LOGIN POPUP ================= */
+
+        .login-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        .login-box {
+            width: 350px;
+            padding: 30px;
+            border-radius: 24px;
+            background: linear-gradient( 135deg, #0f172a, #1e293b );
+            box-shadow: 0 0 30px rgba(0,255,255,0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+            .login-box h2 {
+                text-align: center;
+                color: cyan;
+                margin-bottom: 10px;
+            }
+
+            .login-box input {
+                padding: 15px;
+                border: none;
+                border-radius: 14px;
+                background: rgba(255,255,255,0.08);
+                color: white;
+                font-size: 16px;
+            }
+
+            .login-box button {
+                padding: 15px;
+                border: none;
+                border-radius: 14px;
+                background: linear-gradient( 135deg, #2563eb, #1d4ed8 );
+                color: white;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+        .close-btn {
+            background: linear-gradient( 135deg, #ef4444, #dc2626 ) !important;
         }
         /* ================= SIDEBAR ================= */
         .sidebar {
@@ -376,6 +432,12 @@
             transition: 0.3s;
         }
 
+            input:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                background: rgba(100,100,100,0.3);
+            }
+
             input:focus,
             select:focus {
                 outline: none;
@@ -406,6 +468,24 @@
             border: 1px solid rgba(255,255,255,0.06);
             box-shadow: inset 0 0 10px rgba(0,255,255,0.03);
         }
+
+        .setting-button {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            font-size: 18px;
+            color: white;
+            background: linear-gradient( 145deg, #1e293b, #0f172a );
+            transition: 0.3s;
+            box-shadow: 0 0 10px rgba(0,255,255,0.05);
+        }
+
+            .setting-button:hover {
+                background: linear-gradient( 145deg, #2563eb, #1d4ed8 );
+                transform: translateY(-3px);
+            }
         /* ================= LOGOUT ================= */
 
         .logout-container {
@@ -826,300 +906,394 @@
                 transform: scale(1.08);
                 box-shadow: 0 0 40px cyan;
             }
-        /* ========================================================= */
-        /* ================= MOBILE FULL =========================== */
-        /* ========================================================= */
 
-        body {
-            flex-direction: column;
-            overflow-x: hidden;
-            min-height: 100vh;
+        #loginButton {
+            display: none;
+            margin-top: 15px;
+            width: 220px;
+            padding: 16px;
+            border: none;
+            border-radius: 18px;
+            background: linear-gradient( 135deg, #f59e0b, #d97706 );
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 20px rgba(245,158,11,0.3);
         }
 
-        /* ================= SIDEBAR ================= */
+            #loginButton:hover {
+                transform: scale(1.05);
+            }
 
-        .sidebar {
-            width: 100%;
-            padding: 12px;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 12px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            white-space: nowrap;
-            background: #111827;
-            position: sticky;
-            top: 0;
-            z-index: 999;
-        }
+        /* ========================================================= */
+        /* ================= MOBILE FULL VERSION =================== */
+        /* ========================================================= */
 
-            .sidebar::-webkit-scrollbar {
+        @media screen and (max-width:768px) {
+
+            body {
+                flex-direction: column;
+                overflow-x: hidden;
+                min-height: 100vh;
+            }
+
+            /* ================= SIDEBAR ================= */
+
+            .sidebar {
+                width: 100%;
+                padding: 12px;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 12px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                white-space: nowrap;
+                position: sticky;
+                top: 0;
+                z-index: 999;
+                background: #111827;
+            }
+
+                .sidebar::-webkit-scrollbar {
+                    display: none;
+                }
+
+            .logo {
                 display: none;
             }
 
-        .logo {
-            display: none;
-        }
+            /* ================= BUTTON ================= */
 
-        /* ================= MENU BUTTON ================= */
-
-        .menu-btn {
-            width: auto;
-            min-width: 115px;
-            flex-shrink: 0;
-            padding: 14px 18px;
-            font-size: 15px;
-            border-radius: 16px;
-        }
-
-        /* ================= CONTENT ================= */
-
-        .content {
-            width: 100%;
-            padding: 12px;
-            overflow-x: hidden;
-        }
-
-        /* ================= TOPBAR ================= */
-
-        .topbar {
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .datetime-box {
-            width: 100%;
-            justify-content: center;
-            padding: 12px;
-        }
-
-        .datetime-icon {
-            font-size: 34px;
-        }
-
-        .date-time-text {
-            font-size: 14px;
-        }
-
-        .clock {
-            font-size: 16px;
-        }
-
-        /* ================= TITLE ================= */
-
-        h1 {
-            font-size: 28px;
-            text-align: center;
-        }
-
-        .section-title {
-            font-size: 24px;
-            text-align: center;
-        }
-
-        /* ================= REALTIME ================= */
-
-        .cards {
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-
-        .card {
-            padding: 18px;
-            border-radius: 22px;
-        }
-
-            .card h2 {
-                font-size: 22px;
+            .menu-btn {
+                width: auto;
+                min-width: 120px;
+                flex-shrink: 0;
+                padding: 14px 18px;
+                font-size: 15px;
+                border-radius: 16px;
             }
 
-        .value {
-            font-size: 42px;
-        }
+            /* ================= CONTENT ================= */
 
-        /* ================= STATISTIK ================= */
+            .content {
+                width: 100%;
+                padding: 12px;
+                overflow-x: hidden;
+            }
 
-        .stats-container {
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+            /* ================= TOPBAR ================= */
 
-        .stat-card {
-            padding: 16px;
-        }
+            .topbar {
+                justify-content: center;
+                margin-bottom: 15px;
+            }
 
-            .stat-card h3 {
+            .datetime-box {
+                width: 100%;
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .datetime-icon {
+                font-size: 34px;
+            }
+
+            .date-time-text {
                 font-size: 14px;
             }
 
-            .stat-card div {
+            .clock {
+                font-size: 16px;
+            }
+
+            /* ================= TITLE ================= */
+
+            .section-title {
+                font-size: 24px;
+                text-align: center;
+            }
+
+            .campus-title {
+                font-size: 18px;
+                line-height: 1.3;
+            }
+
+            .campus-logo {
+                width: 90px;
+                height: 90px;
+            }
+
+            /* ================= REALTIME ================= */
+
+            .cards {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .card {
+                padding: 18px;
+                border-radius: 22px;
+            }
+
+                .card h2 {
+                    font-size: 22px;
+                }
+
+            .value {
+                font-size: 42px;
+            }
+
+            /* ================= STATISTIK ================= */
+
+            .stats-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+                .stat-card h3 {
+                    font-size: 14px;
+                }
+
+                .stat-card div {
+                    font-size: 22px;
+                }
+
+            /* ================= STATUS ================= */
+
+            .status-box {
+                padding: 18px;
+                border-radius: 20px;
+            }
+
+            /* ================= GAUGE ================= */
+
+            .gauge-container {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .gauge-card {
+                padding: 18px;
+                border-radius: 24px;
+            }
+
+            .gauge-text {
                 font-size: 22px;
             }
 
-        /* ================= GAUGE ================= */
-
-        .gauge-container {
-            grid-template-columns: 1fr;
-            gap: 18px;
-        }
-
-        .gauge-card {
-            padding: 18px;
-            border-radius: 24px;
-        }
-
-        .gauge-text {
-            font-size: 22px;
-        }
-
-        .gauge-card canvas {
-            max-height: 220px;
-        }
-
-        .gauge-value {
-            font-size: 28px;
-            margin-top: -15px;
-        }
-
-        .gauge-minmax {
-            font-size: 13px;
-            padding: 0 10px;
-        }
-
-        .gauge-warning {
-            font-size: 34px;
-            top: 48%;
-        }
-
-        /* ================= CHART ================= */
-
-        .chart-container {
-            padding: 15px;
-            border-radius: 20px;
-        }
-
-        /* ================= TABLE ================= */
-
-        .table-container {
-            overflow-x: auto;
-            padding: 15px;
-        }
-
-        table {
-            min-width: 700px;
-            font-size: 13px;
-        }
-
-        th {
-            font-size: 14px;
-        }
-
-        th, td {
-            padding: 12px;
-        }
-
-        /* ================= SETTINGS ================= */
-
-        .setting-group {
-            padding: 18px;
-            border-radius: 24px;
-        }
-
-        .setting-text {
-            font-size: 20px;
-        }
-
-        .setting-item {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        input, select {
-            width: 100%;
-        }
-
-        .info-value,
-        .info-status {
-            width: 100%;
-            min-width: 100%;
-        }
-
-        /* ================= BUTTON ================= */
-
-        .logout-btn {
-            width: 100%;
-            padding: 16px;
-            font-size: 18px;
-        }
-
-        /* ================= LOADING ================= */
-
-        #loadingScreen {
-            overflow-y: auto;
-            padding: 25px 15px;
-        }
-
-        .loading-container {
-            width: 100%;
-        }
-
-        .loading-title {
-            font-size: 34px;
-            line-height: 1.2;
-            margin-top: 0;
-        }
-
-        .loading-subtitle {
-            font-size: 14px;
-            margin-bottom: 35px;
-        }
-
-        .loading-text {
-            font-size: 22px;
-        }
-
-        /* ================= ENERGY FLOW ================= */
-
-        .energy-flow {
-            flex-direction: column;
-            gap: 18px;
-            margin-bottom: 40px;
-        }
-
-        .energy-card {
-            width: 150px;
-            height: 150px;
-            border-radius: 24px;
-        }
-
-        .energy-icon {
-            font-size: 60px;
-            margin-bottom: 15px;
-        }
-
-        .energy-name {
-            font-size: 20px;
-        }
-
-        .energy-line {
-            width: 8px;
-            height: 70px;
-        }
-
-            .energy-line::before {
-                width: 100%;
-                height: 30px;
-                background: linear-gradient( 180deg, transparent, cyan, transparent );
+            .gauge-card h3 {
+                font-size: 24px;
             }
 
-        #startButton {
-            width: 180px;
-            padding: 16px;
-            font-size: 20px;
+            .gauge-card canvas {
+                max-height: 220px;
+            }
+
+            .gauge-value {
+                font-size: 30px;
+                margin-top: -15px;
+            }
+
+            .gauge-minmax {
+                font-size: 13px;
+                padding: 0 10px;
+            }
+
+            .gauge-warning {
+                font-size: 34px;
+                top: 48%;
+            }
+
+            /* ================= CHART ================= */
+
+            .chart-container {
+                padding: 15px;
+                border-radius: 20px;
+                overflow-x: auto;
+            }
+
+            /* ================= TABLE ================= */
+
+            .table-container {
+                overflow-x: auto;
+                padding: 15px;
+            }
+
+            table {
+                min-width: 700px;
+                font-size: 13px;
+            }
+
+            th {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 12px;
+            }
+
+            /* ================= SETTINGS ================= */
+
+            .setting-group {
+                padding: 18px;
+                border-radius: 24px;
+            }
+
+                .setting-group h2 {
+                    font-size: 20px;
+                }
+
+            .setting-text {
+                font-size: 20px;
+            }
+
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            input,
+            select {
+                width: 100%;
+            }
+
+            .info-value,
+            .info-status {
+                width: 100%;
+                min-width: 100%;
+            }
+
+            .setting-button {
+                padding: 16px;
+                font-size: 16px;
+            }
+
+            /* ================= LOGOUT ================= */
+
+            .logout-btn {
+                width: 100%;
+                padding: 16px;
+                font-size: 18px;
+            }
+
+            /* ================= LOGIN POPUP ================= */
+
+            .login-box {
+                width: 92%;
+                padding: 25px;
+                border-radius: 22px;
+            }
+
+                .login-box h2 {
+                    font-size: 24px;
+                }
+
+                .login-box input {
+                    padding: 14px;
+                    font-size: 15px;
+                }
+
+                .login-box button {
+                    padding: 14px;
+                    font-size: 15px;
+                }
+
+            /* ================= LOADING SCREEN ================= */
+
+            #loadingScreen {
+                overflow-y: auto;
+                padding: 25px 15px;
+            }
+
+            .loading-container {
+                width: 100%;
+            }
+
+            .loading-title {
+                font-size: 34px;
+                line-height: 1.2;
+                margin-top: 0;
+            }
+
+            .loading-subtitle {
+                font-size: 14px;
+                margin-bottom: 35px;
+            }
+
+            .loading-text {
+                font-size: 22px;
+            }
+
+            /* ================= ENERGY FLOW ================= */
+
+            .energy-flow {
+                flex-direction: column;
+                gap: 18px;
+                margin-bottom: 40px;
+            }
+
+            .energy-card {
+                width: 150px;
+                height: 150px;
+                border-radius: 24px;
+            }
+
+            .energy-icon {
+                font-size: 60px;
+                margin-bottom: 15px;
+            }
+
+            .energy-name {
+                font-size: 20px;
+            }
+
+            .energy-line {
+                width: 8px;
+                height: 70px;
+            }
+
+                .energy-line::before {
+                    width: 100%;
+                    height: 30px;
+                    background: linear-gradient( 180deg, transparent, cyan, transparent );
+                }
+
+            /* ================= BUTTON ================= */
+
+            #startButton {
+                width: 180px;
+                padding: 16px;
+                font-size: 20px;
+            }
+
+            #loginButton {
+                width: 180px;
+                padding: 14px;
+                font-size: 18px;
+            }
         }
+
+        @keyframes flowVertical {
+
+            from {
+                top: -60px;
+            }
+
+            to {
+                top: 100px;
+            }
+        }
+        
     </style>
+
 </head>
 
 <body>
@@ -1214,6 +1388,46 @@
                     onclick="startDashboard()">
 
                 START
+
+            </button>
+            <button id="loginButton">
+
+                🔒 LOGIN ADMIN
+
+            </button>
+
+        </div>
+
+    </div>
+    <!-- ================= LOGIN POPUP ================= -->
+
+    <div id="loginPopup"
+         class="login-popup">
+
+        <div class="login-box">
+
+            <h2>
+                Login Admin
+            </h2>
+
+            <input type="text"
+                   id="adminUsername"
+                   placeholder="Username">
+
+            <input type="password"
+                   id="adminPassword"
+                   placeholder="Password">
+
+            <button onclick="loginAdmin()">
+
+                LOGIN
+
+            </button>
+
+            <button onclick="closeLogin()"
+                    class="close-btn">
+
+                BATAL
 
             </button>
 
@@ -1366,41 +1580,41 @@
             </h2>
             <div class="stats-container">
 
-                <div class="stat-card">
-
+                <div class="stat-card"
+                    onclick="showStatTime(this)">
                     <h3>Tegangan Max</h3>
 
-                    <div id="maxVoltageStat">
+                    <div id="maxVoltageStat" data-time="">
                         0 V
                     </div>
 
                 </div>
 
-                <div class="stat-card">
+                <div class="stat-card" onclick="showStatTime(this)">
 
                     <h3>Tegangan Min</h3>
 
-                    <div id="minVoltageStat">
+                    <div id="minVoltageStat"data-time="">
                         0 V
                     </div>
 
                 </div>
 
-                <div class="stat-card">
+                <div class="stat-card"onclick="showStatTime(this)">
 
                     <h3>Arus Max</h3>
 
-                    <div id="maxCurrentStat">
+                    <div id="maxCurrentStat"data-time="">
                         0 A
                     </div>
 
                 </div>
 
-                <div class="stat-card">
+                <div class="stat-card"onclick="showStatTime(this)">
 
                     <h3>Daya Tertinggi</h3>
 
-                    <div id="maxPowerStat">
+                    <div id="maxPowerStat"data-time="">
                         0 W
                     </div>
 
@@ -1587,7 +1801,7 @@
 
             <!-- MODE -->
 
-            <div class="setting-group">
+            <div class="setting-group" id="systemLimitGroup">
 
                 <div class="setting-text">
                     🎨 Tampilan
@@ -1670,26 +1884,26 @@
 
             <div class="setting-group">
 
-                <div class="setting-text">
+                <div class="setting-text adminOnly">
                     🗑️ Reset Data
                 </div>
 
-                <div class="setting-item">
+                <div class="setting-item adminOnly">
 
                     <label>Reset Statistik</label>
 
-                    <button class="menu-btn"
+                    <button class="setting-button adminOnly"
                             onclick="resetStatistics()">
                         Reset Statistik
                     </button>
 
                 </div>
 
-                <div class="setting-item">
+                <div class="setting-item adminOnly">
 
                     <label>Reset Data Abnormal</label>
 
-                    <button class="menu-btn"
+                    <button class="setting-button adminOnly"
                             onclick="resetAbnormalHistory()">
                         Reset Abnormal
                     </button>
@@ -1779,53 +1993,117 @@
         /* ================= SAVE SETTINGS ========================= */
         /* ========================================================= */
 
-        function saveSettings() {
+        async function saveSettings() {
 
-            localStorage.setItem(
-                "minVoltage",
-                document.getElementById("minVoltage").value
-            );
+            try {
 
-            localStorage.setItem(
-                "maxVoltage",
-                document.getElementById("maxVoltage").value
-            );
+                // ================= AMBIL INPUT =================
 
-            localStorage.setItem(
-                "maxCurrent",
-                document.getElementById("maxCurrent").value
-            );
+                const minVoltageValue =
+                    parseFloat(
+                        document.getElementById("minVoltage").value
+                    );
+
+                const maxVoltageValue =
+                    parseFloat(
+                        document.getElementById("maxVoltage").value
+                    );
+
+                const maxCurrentValue =
+                    parseFloat(
+                        document.getElementById("maxCurrent").value
+                    );
+
+                // ================= UPDATE VARIABLE =================
+
+                minVoltage = minVoltageValue;
+                maxVoltage = maxVoltageValue;
+                maxCurrent = maxCurrentValue;
+
+                // ================= SAVE KE FIREBASE =================
+
+                await fetch(urlSettings, {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        minVoltage: minVoltageValue,
+                        maxVoltage: maxVoltageValue,
+                        maxCurrent: maxCurrentValue
+
+                    })
+
+                });
+
+                // ================= ALERT =================
+
+                alert(
+                    "Batas sistem berhasil diperbarui"
+                );
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Gagal save settings:",
+                    error
+                );
+
+                alert(
+                    "Gagal menyimpan settings"
+                );
+
+            }
 
         }
-        function loadSettings() {
+        async function loadSettings() {
 
-            const savedMinVoltage =
-                localStorage.getItem("minVoltage");
+            try {
 
-            const savedMaxVoltage =
-                localStorage.getItem("maxVoltage");
+                const response =
+                    await fetch(urlSettings);
 
-            const savedMaxCurrent =
-                localStorage.getItem("maxCurrent");
+                const settings =
+                    await response.json();
 
-            if (savedMinVoltage !== null) {
+                if (!settings) return;
+
+                // ================= INPUT =================
 
                 document.getElementById("minVoltage")
-                    .value = savedMinVoltage;
-
-            }
-
-            if (savedMaxVoltage !== null) {
+                    .value = settings.minVoltage;
 
                 document.getElementById("maxVoltage")
-                    .value = savedMaxVoltage;
+                    .value = settings.maxVoltage;
+
+                document.getElementById("maxCurrent")
+                    .value = settings.maxCurrent;
+
+                // ================= GAUGE =================
+
+                minVoltage =
+                    parseFloat(settings.minVoltage);
+
+                maxVoltage =
+                    parseFloat(settings.maxVoltage);
+
+                maxCurrent =
+                    parseFloat(settings.maxCurrent);
 
             }
 
-            if (savedMaxCurrent !== null) {
+            catch (error) {
 
-                document.getElementById("maxCurrent")
-                    .value = savedMaxCurrent;
+                console.log(
+                    "Gagal load settings:",
+                    error
+                );
 
             }
 
@@ -2040,6 +2318,15 @@
 
         const urlHistory =
             "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/History.json";
+
+        const urlSettings =
+            "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/settings.json";
+
+        const urlReset =
+            "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/reset.json";
+
+        const urlAdmin =
+            "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/admin.json";
         /* ========================================================= */
         /* ================= REALTIME DATA ========================= */
         /* ========================================================= */
@@ -2294,15 +2581,27 @@
                 }
 
                 document.getElementById("maxVoltageStat")
+                    .dataset.time = maxVoltageTime
+
+                document.getElementById("maxVoltageStat")
                     .innerText = maxVoltageValue.toFixed(1) + " V";
 
                 document.getElementById("minVoltageStat")
+                    .dataset.time = maxVoltageTime
+
+                document.getElementById("maxVoltageStat")
                     .innerText = minVoltageValue.toFixed(1) + " V";
 
                 document.getElementById("maxCurrentStat")
+                    .dataset.time = maxVoltageTime
+
+                document.getElementById("maxVoltageStat")
                     .innerText = maxCurrentValue.toFixed(2) + " A";
 
                 document.getElementById("maxPowerStat")
+                    .dataset.time = maxVoltageTime
+
+                document.getElementById("maxVoltageStat")
                     .innerText = maxPowerValue.toFixed(1) + " W";
 
                 document.getElementById("maxVoltageStat")
@@ -2509,23 +2808,23 @@
 
                 row.innerHTML = `
 
-                    <td>
-                        ${item.waktu}
-                    </td>
+                            <td>
+                                ${item.waktu}
+                            </td>
 
-                    <td>
-                        ${item.parameter}
-                    </td>
+                            <td>
+                                ${item.parameter}
+                            </td>
 
-                    <td>
-                        ${item.nilai}
-                    </td>
+                            <td>
+                                ${item.nilai}
+                            </td>
 
-                    <td class="status-danger">
-                        ${item.status}
-                    </td>
+                            <td class="status-danger">
+                                ${item.status}
+                            </td>
 
-                `;
+                        `;
 
             });
 
@@ -2537,7 +2836,7 @@
 
         let historyLevel = "daily";
         let selectedDate = "";
-
+        let adminMode = false;
         /* ================= HARIAN ================= */
 
         async function loadDailyHistory() {
@@ -2611,25 +2910,25 @@
 
                     row.innerHTML = `
 
-                        <td>${date}</td>
+                                <td>${date}</td>
 
-                        <td>
-                            ${avgVoltage.toFixed(1)} V
-                        </td>
+                                <td>
+                                    ${avgVoltage.toFixed(1)} V
+                                </td>
 
-                        <td>
-                            ${avgCurrent.toFixed(2)} A
-                        </td>
+                                <td>
+                                    ${avgCurrent.toFixed(2)} A
+                                </td>
 
-                        <td>
-                            ${avgPower.toFixed(1)} W
-                        </td>
+                                <td>
+                                    ${avgPower.toFixed(1)} W
+                                </td>
 
-                        <td>
-                           ${lastEnergy.toFixed(2)} kWh
-                        </td>
+                                <td>
+                                   ${lastEnergy.toFixed(2)} kWh
+                                </td>
 
-                    `;
+                            `;
 
                     row.onclick = () => {
 
@@ -2724,25 +3023,25 @@
 
                     row.innerHTML = `
 
-                        <td>${hour}:00</td>
+                                <td>${hour}:00</td>
 
-                        <td>
-                            ${(item.voltage / item.count).toFixed(1)} V
-                        </td>
+                                <td>
+                                    ${(item.voltage / item.count).toFixed(1)} V
+                                </td>
 
-                        <td>
-                            ${(item.current / item.count).toFixed(2)} A
-                        </td>
+                                <td>
+                                    ${(item.current / item.count).toFixed(2)} A
+                                </td>
 
-                        <td>
-                            ${(item.power / item.count).toFixed(1)} W
-                        </td>
+                                <td>
+                                    ${(item.power / item.count).toFixed(1)} W
+                                </td>
 
-                        <td>
-                            ${item.energy.toFixed(2)} kWh
-                        </td>
+                                <td>
+                                    ${item.energy.toFixed(2)} kWh
+                                </td>
 
-                    `;
+                            `;
 
                     row.onclick = () => {
 
@@ -2803,25 +3102,25 @@
 
                         row.innerHTML = `
 
-                            <td>${time}</td>
+                                    <td>${time}</td>
 
-                            <td>
-                                ${item.tegangan} V
-                            </td>
+                                    <td>
+                                        ${item.tegangan} V
+                                    </td>
 
-                            <td>
-                                ${item.arus} A
-                            </td>
+                                    <td>
+                                        ${item.arus} A
+                                    </td>
 
-                            <td>
-                                ${item.daya} W
-                            </td>
+                                    <td>
+                                        ${item.daya} W
+                                    </td>
 
-                            <td>
-                                ${item.energi} kWh
-                            </td>
+                                    <td>
+                                        ${item.energi} kWh
+                                    </td>
 
-                        `;
+                                `;
 
                     }
 
@@ -2999,6 +3298,21 @@
             alert("Riwayat abnormal berhasil direset!");
 
         }
+        function showStatTime(card) {
+
+            const stat =
+                card.querySelector("div[id]");
+
+            if (!stat) return;
+
+            const time =
+                stat.dataset.time || "-";
+
+            alert(
+                "Data tercatat:\n\n" + time
+            );
+
+        }
 
         /* ================= LOADING SCREEN ================= */
 
@@ -3016,19 +3330,167 @@
 
             document.getElementById("startButton")
                 .style.display = "inline-block";
+            document.getElementById("loginButton")
+                .style.display = "inline-block";
+            document
+                .querySelectorAll(".adminOnly")
+                .forEach(item => {
+
+                    item.style.display = "none";
+
+                });
+
+            document
+                .getElementById("loginButton")
+                .addEventListener("click", () => {
+
+                    document
+                        .getElementById("loginPopup")
+                        .style.display = "flex";
+
+                });
 
         }, 4000);
+        async function loginAdmin() {
+
+            const username =
+                document.getElementById("adminUsername").value;
+
+            const password =
+                document.getElementById("adminPassword").value;
+
+            try {
+
+                const response =
+                    await fetch(urlAdmin);
+
+                const admin =
+                    await response.json();
+
+                if (
+                    username === admin.username &&
+                    password === admin.password
+                ) {
+
+                    adminMode = true;
+
+                    // ENABLE INPUT ADMIN
+                    document.getElementById("minVoltage")
+                        .disabled = false;
+
+                    document.getElementById("maxVoltage")
+                        .disabled = false;
+
+                    document.getElementById("maxCurrent")
+                        .disabled = false;
+
+                    document
+                        .querySelectorAll(".adminOnly")
+                        .forEach(item => {
+
+                            item.style.display = "flex";
+
+                        });
+
+                    closeLogin();
+
+                    // MASUK DASHBOARD
+                    document.getElementById("loadingScreen")
+                        .style.display = "none";
+
+                    // TAMPIL HALAMAN REALTIME
+                    showPage("realtime");
+
+                    // KOSONGKAN INPUT
+                    document.getElementById("adminUsername")
+                        .value = "";
+
+                    document.getElementById("adminPassword")
+                        .value = "";
+
+                    alert("Login berhasil!");
+
+                }
+
+                else {
+
+                    alert("Username atau password salah!");
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.log(error);
+
+                alert("Gagal login");
+
+            }
+
+        }
+        function closeLogin() {
+
+            document
+                .getElementById("loginPopup")
+                .style.display = "none";
+
+        }
 
         function startDashboard() {
 
+            // VIEW MODE
+            adminMode = false;
+
+            // HIDE ADMIN MENU
+            document
+                .querySelectorAll(".adminOnly")
+                .forEach(item => {
+
+                    item.style.display = "none";
+
+                });
+
+            // MASUK DASHBOARD
             document.getElementById("loadingScreen")
                 .style.display = "none";
+
+            // DISABLE INPUT VIEWER
+            document.getElementById("minVoltage")
+                .disabled = true;
+
+            document.getElementById("maxVoltage")
+                .disabled = true;
+
+            document.getElementById("maxCurrent")
+                .disabled = true;
+
             showPage("realtime");
 
         }
 
         function logoutDashboard() {
 
+            // KEMBALI KE VIEW MODE
+            adminMode = false;
+
+            // SEMBUNYIKAN TOMBOL ADMIN
+            document
+                .querySelectorAll(".adminOnly")
+                .forEach(item => {
+
+                    item.style.display = "none";
+
+                });
+
+            // KOSONGKAN INPUT LOGIN
+            document.getElementById("adminUsername")
+                .value = "";
+
+            document.getElementById("adminPassword")
+                .value = "";
+
+            // TAMPILKAN LOADING SCREEN
             document.getElementById("loadingScreen")
                 .style.display = "flex";
 
