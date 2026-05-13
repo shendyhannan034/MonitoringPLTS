@@ -1027,7 +1027,7 @@
                 </div>
 
                 <div class="loading-title">
-                    SISTEM MONITORING PLTS
+                    SISTEM MONITORING PLTS v2
                 </div>
 
                 <!-- FLOW ENERGI -->
