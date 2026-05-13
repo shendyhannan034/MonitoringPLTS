@@ -838,10 +838,6 @@
                 }
             }
             /* ========================================================= */
-            /* ================= MOBILE RESPONSIVE ===================== */
-            /* ========================================================= */
-
-            /* ========================================================= */
             /* ================= MOBILE FIX ============================ */
             /* ========================================================= */
 
@@ -901,6 +897,114 @@
                     width: 180px;
                     font-size: 20px;
                     padding: 16px 20px;
+                }
+            }
+            /* ========================================================= */
+            /* ================= MOBILE DASHBOARD ====================== */
+            /* ========================================================= */
+
+            @media screen and (max-width: 768px) {
+
+                /* BODY */
+                body {
+                    overflow-x: hidden;
+                }
+
+                /* SIDEBAR */
+                .sidebar {
+                    width: 100%;
+                    height: auto;
+                    position: relative;
+                    flex-direction: row;
+                    justify-content: center;
+                    gap: 12px;
+                    padding: 10px;
+                    border-radius: 0 0 20px 20px;
+                }
+
+                .logo-container {
+                    display: none;
+                }
+
+                /* MENU BUTTON */
+                .menu-btn {
+                    width: 100px;
+                    height: 80px;
+                    font-size: 16px;
+                    border-radius: 20px;
+                }
+
+                /* MAIN CONTENT */
+                .main-content {
+                    margin-left: 0;
+                    padding: 15px;
+                }
+
+                /* CLOCK */
+                .datetime-box {
+                    width: 100%;
+                    padding: 15px;
+                    border-radius: 20px;
+                }
+
+                .clock-time {
+                    font-size: 38px;
+                }
+
+                /* TITLE */
+                .section-title {
+                    font-size: 38px;
+                    text-align: center;
+                }
+
+                /* REALTIME CARD */
+                .card-container {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+
+                .card {
+                    width: 100%;
+                    min-height: 220px;
+                    border-radius: 28px;
+                }
+
+                .card-title {
+                    font-size: 28px;
+                }
+
+                .card-value {
+                    font-size: 52px;
+                }
+
+                /* STATISTIK */
+                .stats-container {
+                    grid-template-columns: 1fr 1fr;
+                    gap: 15px;
+                }
+
+                .stat-card {
+                    min-height: 120px;
+                }
+
+                /* GAUGE */
+                .gauge-container {
+                    grid-template-columns: 1fr;
+                }
+
+                .gauge-card {
+                    width: 100%;
+                    overflow: hidden;
+                }
+
+                /* TABLE */
+                table {
+                    font-size: 14px;
+                }
+
+                /* BUTTON */
+                button {
+                    font-size: 16px;
                 }
             }
         </style>
