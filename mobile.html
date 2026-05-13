@@ -1594,7 +1594,7 @@
 
                     <h3>Tegangan Min</h3>
 
-                    <div id="minVoltageStat"data-time="">
+                    <div id="minVoltageStat" data-time="">
                         0 V
                     </div>
 
@@ -1604,7 +1604,7 @@
 
                     <h3>Arus Max</h3>
 
-                    <div id="maxCurrentStat"data-time="">
+                    <div id="maxCurrentStat" data-time="">
                         0 A
                     </div>
 
@@ -1614,7 +1614,7 @@
 
                     <h3>Daya Tertinggi</h3>
 
-                    <div id="maxPowerStat"data-time="">
+                    <div id="maxPowerStat" data-time="">
                         0 W
                     </div>
 
@@ -2587,19 +2587,19 @@
                     .innerText = maxVoltageValue.toFixed(1) + " V";
 
                 document.getElementById("minVoltageStat")
-                    .dataset.time = maxVoltageTime
+                    .dataset.time = minVoltageTime
 
                 document.getElementById("maxVoltageStat")
                     .innerText = minVoltageValue.toFixed(1) + " V";
 
                 document.getElementById("maxCurrentStat")
-                    .dataset.time = maxVoltageTime
+                    .dataset.time = maxCurrentTime
 
                 document.getElementById("maxVoltageStat")
                     .innerText = maxCurrentValue.toFixed(2) + " A";
 
                 document.getElementById("maxPowerStat")
-                    .dataset.time = maxVoltageTime
+                    .dataset.time = maxPowerTime
 
                 document.getElementById("maxVoltageStat")
                     .innerText = maxPowerValue.toFixed(1) + " W";
