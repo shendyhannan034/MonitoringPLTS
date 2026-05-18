@@ -1755,6 +1755,7 @@
                             <th>Arus</th>
                             <th>Daya</th>
                             <th>Energi</th>
+                            <th class="adminOnly">Aksi</th>
 
                         </tr>
 
@@ -1764,6 +1765,37 @@
                     </tbody>
 
                 </table>
+            </div>
+            <div id="downloadContainer"
+                 class="adminOnly"
+                 style="
+                  margin-bottom:20px;
+                  display:flex;
+                  gap:10px;
+                  align-items:center;
+                  flex-wrap:wrap;
+               ">
+
+                <select id="startDate">
+                    <option value="">
+                        Pilih Tanggal Awal
+                    </option>
+                </select>
+
+                <select id="endDate">
+                    <option value="">
+                        Pilih Tanggal Akhir
+                    </option>
+                </select>
+
+                <button class="setting-button"
+                        style="width:auto;padding:12px 20px;"
+                        onclick="downloadHistoryRange()">
+
+                    ⬇ Download Data
+
+                </button>
+
             </div>
 
 
@@ -2929,6 +2961,29 @@
                                    ${lastEnergy.toFixed(2)} kWh
                                 </td>
 
+                             ${adminMode ? `
+
+                            <td>
+
+                                <button
+                                    onclick="event.stopPropagation(); deleteHistoryDay('${date}')"
+                                    style="
+                                        padding:8px 14px;
+                                        border:none;
+                                        border-radius:10px;
+                                        background:#ef4444;
+                                        color:white;
+                                        cursor:pointer;
+                                        font-weight:bold;
+                                    ">
+
+                                    🗑 Hapus
+
+                                </button>
+
+                            </td>
+
+                            ` : ""}
                             `;
 
                     row.onclick = () => {
@@ -3232,6 +3287,8 @@
         loadSettings();
         loadAbnormalHistory();
         updateRealtimeData();
+        loadDailyHistory();
+        loadDownloadDates();
         setInterval(() => {
 
             updateRealtimeData();
@@ -3437,7 +3494,329 @@
                 .style.display = "none";
 
         }
+        async function downloadHistoryRange() {
 
+            const startDate =
+                document.getElementById("startDate").value;
+
+            const endDate =
+                document.getElementById("endDate").value;
+
+            if (!startDate || !endDate) {
+
+                alert(
+                    "Pilih tanggal awal dan akhir!"
+                );
+
+                return;
+            }
+
+            try {
+
+                const response =
+                    await fetch(urlHistory);
+
+                const data =
+                    await response.json();
+
+                if (!data) {
+
+                    alert("Data kosong");
+                    return;
+
+                }
+
+                let csv = "";
+
+                // =====================================================
+                // ================= RIWAYAT HARIAN ====================
+                // =====================================================
+
+                csv += "===== RIWAYAT HARIAN =====\n\n";
+
+                csv +=
+                    "Tanggal,Rata Tegangan,Rata Arus,Rata Daya,Energy\n";
+
+                Object.keys(data).forEach(date => {
+
+                    if (date >= startDate && date <= endDate) {
+
+                        const dayData =
+                            data[date];
+
+                        let totalVoltage = 0;
+                        let totalCurrent = 0;
+                        let totalPower = 0;
+                        let count = 0;
+
+                        Object.values(dayData).forEach(item => {
+
+                            totalVoltage +=
+                                parseFloat(item.tegangan || 0);
+
+                            totalCurrent +=
+                                parseFloat(item.arus || 0);
+
+                            totalPower +=
+                                parseFloat(item.daya || 0);
+
+                            count++;
+
+                        });
+
+                        const avgVoltage =
+                            totalVoltage / count;
+
+                        const avgCurrent =
+                            totalCurrent / count;
+
+                        const avgPower =
+                            totalPower / count;
+
+                        const lastEnergy =
+                            parseFloat(
+                                Object.values(dayData)
+                                    .slice(-1)[0]
+                                    .energi || 0
+                            );
+
+                        csv +=
+                            `${date},${avgVoltage.toFixed(1)},${avgCurrent.toFixed(2)},${avgPower.toFixed(1)},${lastEnergy.toFixed(2)}\n`;
+
+                    }
+
+                });
+
+                // =====================================================
+                // ================= RIWAYAT PER JAM ===================
+                // =====================================================
+
+                csv += "\n\n===== RIWAYAT PER JAM =====\n\n";
+
+                csv +=
+                    "Tanggal,Jam,Tegangan,Arus,Daya,Energy\n";
+
+                Object.keys(data).forEach(date => {
+
+                    if (date >= startDate && date <= endDate) {
+
+                        const dayData =
+                            data[date];
+
+                        const groupedHours = {};
+
+                        Object.keys(dayData).forEach(time => {
+
+                            const hour =
+                                time.split(":")[0];
+
+                            if (!groupedHours[hour]) {
+
+                                groupedHours[hour] = {
+
+                                    voltage: 0,
+                                    current: 0,
+                                    power: 0,
+                                    energy: 0,
+                                    count: 0
+
+                                };
+
+                            }
+
+                            groupedHours[hour].voltage +=
+                                parseFloat(dayData[time].tegangan || 0);
+
+                            groupedHours[hour].current +=
+                                parseFloat(dayData[time].arus || 0);
+
+                            groupedHours[hour].power +=
+                                parseFloat(dayData[time].daya || 0);
+
+                            groupedHours[hour].energy =
+                                parseFloat(dayData[time].energi || 0);
+
+                            groupedHours[hour].count++;
+
+                        });
+
+                        Object.keys(groupedHours).forEach(hour => {
+
+                            const item =
+                                groupedHours[hour];
+
+                            csv +=
+                                `${date},${hour}:00,${(item.voltage / item.count).toFixed(1)},${(item.current / item.count).toFixed(2)},${(item.power / item.count).toFixed(1)},${item.energy.toFixed(2)}\n`;
+
+                        });
+
+                    }
+
+                });
+
+                // =====================================================
+                // ================= RIWAYAT 15 DETIK ==================
+                // =====================================================
+
+                csv += "\n\n===== RIWAYAT PER 15 DETIK =====\n\n";
+
+                csv +=
+                    "Tanggal,Waktu,Tegangan,Arus,Daya,Energy\n";
+
+                Object.keys(data).forEach(date => {
+
+                    if (date >= startDate && date <= endDate) {
+
+                        const dayData =
+                            data[date];
+
+                        Object.keys(dayData).forEach(time => {
+
+                            const item =
+                                dayData[time];
+
+                            csv +=
+                                `${date},${time},${item.tegangan},${item.arus},${item.daya},${item.energi}\n`;
+
+                        });
+
+                    }
+
+                });
+
+                // =====================================================
+                // ================= DOWNLOAD FILE =====================
+                // =====================================================
+
+                const blob =
+                    new Blob([csv], {
+                        type: "text/csv"
+                    });
+
+                const link =
+                    document.createElement("a");
+
+                link.href =
+                    URL.createObjectURL(blob);
+
+                link.download =
+                    `History_PLTS_${startDate}_sampai_${endDate}.csv`;
+
+                link.click();
+
+            }
+
+            catch (error) {
+
+                console.log(error);
+
+                alert(
+                    "Gagal download data"
+                );
+
+            }
+
+        }
+        async function loadDownloadDates() {
+
+            try {
+
+                const response =
+                    await fetch(urlHistory);
+
+                const data =
+                    await response.json();
+
+                if (!data) return;
+
+                const startSelect =
+                    document.getElementById("startDate");
+
+                const endSelect =
+                    document.getElementById("endDate");
+
+                // RESET OPTION
+                startSelect.innerHTML =
+                    `<option value="">
+    Pilih Tanggal Awal
+</option>`;
+
+                endSelect.innerHTML =
+                    `<option value="">
+    Pilih Tanggal Akhir
+</option>`;
+
+                // AMBIL TANGGAL
+                Object.keys(data)
+                    .sort()
+                    .reverse()
+                    .forEach(date => {
+
+                        startSelect.innerHTML +=
+                            `<option value="${date}">
+        ${date}
+    </option>`;
+
+                        endSelect.innerHTML +=
+                            `<option value="${date}">
+        ${date}
+    </option>`;
+
+                    });
+
+            }
+
+            catch (error) {
+
+                console.log(error);
+
+            }
+
+        }
+        async function deleteHistoryDay(date) {
+
+            const confirmDelete =
+                confirm(
+                    "Hapus semua riwayat tanggal " +
+                    date +
+                    " ?"
+                );
+
+            if (!confirmDelete) return;
+
+            try {
+
+                await fetch(
+
+                    "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/History/"
+                    + date +
+                    ".json",
+
+                    {
+                        method: "DELETE"
+                    }
+
+                );
+
+                alert(
+                    "Riwayat berhasil dihapus!"
+                );
+
+                loadDailyHistory();
+
+            }
+
+            catch (error) {
+
+                console.log(error);
+
+                alert(
+                    "Gagal menghapus riwayat!"
+                );
+
+            }
+
+        }
         function startDashboard() {
 
             // VIEW MODE
