@@ -2360,6 +2360,9 @@
 
         const urlAdmin =
             "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/admin.json";
+
+        const urlAbnormal =
+            "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/abnormalHistory.json";
         /* ========================================================= */
         /* ================= REALTIME DATA ========================= */
         /* ========================================================= */
@@ -2786,80 +2789,99 @@
         /* ================= ABNORMAL HISTORY ====================== */
         /* ========================================================= */
 
-        function addAbnormal(parameter, value, status) {
+        async function addAbnormal(parameter, value, status) {
 
-            const abnormalData = {
-                waktu:
-                    new Date().toLocaleString(),
-                parameter: parameter,
-                nilai: value,
-                status: status
-            };
+            try {
 
-            // AMBIL DATA LAMA
-            let abnormalHistory =
-                JSON.parse(
-                    localStorage.getItem("abnormalHistory")
-                ) || [];
+                const abnormalData = {
 
-            // TAMBAH DATA BARU
-            abnormalHistory.unshift(abnormalData);
+                    waktu:
+                        new Date().toLocaleString(),
 
-            // LIMIT 50 DATA
-            if (abnormalHistory.length > 50) {
+                    parameter: parameter,
 
-                abnormalHistory.pop();
+                    nilai: value,
+
+                    status: status
+
+                };
+
+                await fetch(urlAbnormal, {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(abnormalData)
+
+                });
+
+                loadAbnormalHistory();
 
             }
 
-            // SIMPAN
-            localStorage.setItem(
-                "abnormalHistory",
-                JSON.stringify(abnormalHistory)
-            );
+            catch (error) {
 
-            // REFRESH TABLE
-            loadAbnormalHistory();
+                console.log(error);
+
+            }
 
         }
-        function loadAbnormalHistory() {
+        async function loadAbnormalHistory() {
 
             const table =
                 document.getElementById("abnormalTable");
 
             table.innerHTML = "";
 
-            let abnormalHistory =
-                JSON.parse(
-                    localStorage.getItem("abnormalHistory")
-                ) || [];
+            try {
 
-            abnormalHistory.forEach(item => {
+                const response =
+                    await fetch(urlAbnormal);
 
-                const row =
-                    table.insertRow();
+                const data =
+                    await response.json();
 
-                row.innerHTML = `
+                if (!data) return;
 
-                            <td>
-                                ${item.waktu}
-                            </td>
+                Object.values(data)
+                    .reverse()
+                    .forEach(item => {
 
-                            <td>
-                                ${item.parameter}
-                            </td>
+                        const row =
+                            table.insertRow();
 
-                            <td>
-                                ${item.nilai}
-                            </td>
+                        row.innerHTML = `
 
-                            <td class="status-danger">
-                                ${item.status}
-                            </td>
+                    <td>
+                        ${item.waktu}
+                    </td>
 
-                        `;
+                    <td>
+                        ${item.parameter}
+                    </td>
 
-            });
+                    <td>
+                        ${item.nilai}
+                    </td>
+
+                    <td class="status-danger">
+                        ${item.status}
+                    </td>
+
+                `;
+
+                    });
+
+            }
+
+            catch (error) {
+
+                console.log(error);
+
+            }
 
         }
 
@@ -3348,7 +3370,11 @@
             if (!confirm("Hapus semua riwayat abnormal?"))
                 return;
 
-            localStorage.removeItem("abnormalHistory");
+            fetch(urlAbnormal, {
+
+                method: "DELETE"
+
+            });
 
             document.getElementById("abnormalTable")
                 .innerHTML = "";
