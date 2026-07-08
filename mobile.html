@@ -1907,7 +1907,7 @@
 
                     <label>Interval Update</label>
                     <div class="info-value">
-                        5 Detik
+                        1 Detik
                     </div>
 
                 </div>
@@ -1939,6 +1939,18 @@
                     <button class="setting-button adminOnly"
                             onclick="resetAbnormalHistory()">
                         Reset Abnormal
+                    </button>
+
+                </div>
+
+                <div class="setting-item adminOnly">
+
+                    <label>Reset Energy PZEM</label>
+
+                    <button class="setting-button abnormal"
+                            onclick="resetEnergy()">
+                        Reset Energy
+
                     </button>
 
                 </div>
@@ -3365,6 +3377,42 @@
 
         }
 
+        // ================= RESET ENERGY =================
+
+        async function resetEnergy() {
+
+            const konfirmasi = confirm(
+                "Apakah Anda yakin ingin mereset nilai Energy PZEM?"
+            );
+
+            if (!konfirmasi) return;
+
+            try {
+
+                await fetch(
+                    "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/command/resetEnergy.json",
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(true)
+                    }
+                );
+
+                alert("Perintah reset berhasil dikirim ke ESP32.");
+
+            }
+
+            catch (error) {
+
+                console.log(error);
+
+                alert("Gagal mengirim perintah reset.");
+
+            }
+
+        }
         function resetAbnormalHistory() {
 
             if (!confirm("Hapus semua riwayat abnormal?"))
