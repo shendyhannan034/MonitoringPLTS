@@ -1213,7 +1213,7 @@
                 <!-- ================= STATISTIK ================= -->
 
                 <h2 class="section-title">
-                    Statistik
+                    Statistik Hari Ini
                 </h2>
                 <div class="stats-container">
 
@@ -1433,7 +1433,39 @@
 
                 </div>
 
+                <!-- Statistik Harian -->
+                <h2>Riwayat Statistik Harian</h2>
 
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Waktu</th>
+
+                                <th>Tegangan Max</th>
+
+                                <th>Tegangan Min</th>
+
+                                <th>Arus Max</th>
+
+                                <th>Daya Tertinggi</th>
+
+                                <th class="adminOnly">Aksi</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="dailyStatisticTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
                 <!-- ABNORMAL -->
 
                 <h2>Riwayat Data Abnormal</h2>
@@ -1798,29 +1830,15 @@
             const currentData = [];
             const powerData = [];
             const energyData = [];
-            let maxVoltageValue =
-                parseFloat(localStorage.getItem("maxVoltageStat")) || 0;
+            let maxVoltageValue = 0;
+            let minVoltageValue = 9999;
+            let maxCurrentValue = 0;
+            let maxPowerValue = 0;
 
-            let minVoltageValue =
-                parseFloat(localStorage.getItem("minVoltageStat")) || 9999;
-
-            let maxCurrentValue =
-                parseFloat(localStorage.getItem("maxCurrentStat")) || 0;
-
-            let maxPowerValue =
-                parseFloat(localStorage.getItem("maxPowerStat")) || 0;
-
-            let maxVoltageTime =
-                localStorage.getItem("maxVoltageTime") || "-";
-
-            let minVoltageTime =
-                localStorage.getItem("minVoltageTime") || "-";
-
-            let maxCurrentTime =
-                localStorage.getItem("maxCurrentTime") || "-";
-
-            let maxPowerTime =
-                localStorage.getItem("maxPowerTime") || "-";
+            let maxVoltageTime = "-";
+            let minVoltageTime = "-";
+            let maxCurrentTime = "-";
+            let maxPowerTime = "-";
 
             /* ================= GAUGE ================= */
 
@@ -2017,6 +2035,100 @@
             let lastPower = 0;
             let lastAbnormal = "";
 
+            async function loadStatisticsFromHistory() {
+
+                try {
+
+                    const response = await fetch(urlHistory);
+                    const history = await response.json();
+
+                    if (!history) return;
+
+                    const today = new Date().toISOString().split("T")[0];
+
+                    if (!history[today]) return;
+
+                    const todayData = history[today];
+
+                    maxVoltageValue = 0;
+                    minVoltageValue = 9999;
+                    maxCurrentValue = 0;
+                    maxPowerValue = 0;
+
+                    maxVoltageTime = "-";
+                    minVoltageTime = "-";
+                    maxCurrentTime = "-";
+                    maxPowerTime = "-";
+
+                    Object.entries(todayData).forEach(([time, item]) => {
+
+                        const voltage = parseFloat(item.tegangan || 0);
+                        const current = parseFloat(item.arus || 0);
+                        const power = parseFloat(item.daya || 0);
+
+                        if (voltage > maxVoltageValue) {
+
+                            maxVoltageValue = voltage;
+                            maxVoltageTime = time;
+
+                        }
+
+                        if (voltage < minVoltageValue) {
+
+                            minVoltageValue = voltage;
+                            minVoltageTime = time;
+
+                        }
+
+                        if (current > maxCurrentValue) {
+
+                            maxCurrentValue = current;
+                            maxCurrentTime = time;
+
+                        }
+
+                        if (power > maxPowerValue) {
+
+                            maxPowerValue = power;
+                            maxPowerTime = time;
+
+                        }
+
+                    });
+
+                    document.getElementById("maxVoltageStat").innerText =
+                        maxVoltageValue.toFixed(1) + " V";
+
+                    document.getElementById("minVoltageStat").innerText =
+                        minVoltageValue.toFixed(1) + " V";
+
+                    document.getElementById("maxCurrentStat").innerText =
+                        maxCurrentValue.toFixed(2) + " A";
+
+                    document.getElementById("maxPowerStat").innerText =
+                        maxPowerValue.toFixed(1) + " W";
+
+                    document.getElementById("maxVoltageStat").title =
+                        "Jam : " + maxVoltageTime;
+
+                    document.getElementById("minVoltageStat").title =
+                        "Jam : " + minVoltageTime;
+
+                    document.getElementById("maxCurrentStat").title =
+                        "Jam : " + maxCurrentTime;
+
+                    document.getElementById("maxPowerStat").title =
+                        "Jam : " + maxPowerTime;
+
+                }
+
+                catch (err) {
+
+                    console.log(err);
+
+                }
+
+            }
             async function updateRealtimeData() {
 
                 try {
@@ -2241,82 +2353,6 @@
                     document.getElementById('energyStatus')
                         .innerText = "MONITORING";
 
-                    // ================= STATISTIK =================
-
-                    if (voltage > maxVoltageValue) {
-                        maxVoltageValue = voltage;
-                        maxVoltageTime = new Date().toLocaleString();
-                    }
-
-                    if (voltage < minVoltageValue) {
-                        minVoltageValue = voltage;
-                        minVoltageTime = new Date().toLocaleString();
-                    }
-
-                    if (current > maxCurrentValue) {
-                        maxCurrentValue = current;
-                        maxCurrentTime = new Date().toLocaleString();
-                    }
-
-                    if (power > maxPowerValue) {
-                        maxPowerValue = power;
-                        maxPowerTime = new Date().toLocaleString();
-                    }
-
-                    document.getElementById("maxVoltageStat")
-                        .innerText = maxVoltageValue.toFixed(1) + " V";
-
-                    document.getElementById("minVoltageStat")
-                        .innerText = minVoltageValue.toFixed(1) + " V";
-
-                    document.getElementById("maxCurrentStat")
-                        .innerText = maxCurrentValue.toFixed(2) + " A";
-
-                    document.getElementById("maxPowerStat")
-                        .innerText = maxPowerValue.toFixed(1) + " W";
-
-                    document.getElementById("maxVoltageStat")
-                        .title = "Tercatat: " + maxVoltageTime;
-
-                    document.getElementById("minVoltageStat")
-                        .title = "Tercatat: " + minVoltageTime;
-
-                    document.getElementById("maxCurrentStat")
-                        .title = "Tercatat: " + maxCurrentTime;
-
-                    document.getElementById("maxPowerStat")
-                        .title = "Tercatat: " + maxPowerTime;
-
-                    localStorage.setItem(
-                        "maxVoltageStat", maxVoltageValue
-                    );
-
-                    localStorage.setItem(
-                        "minVoltageStat", minVoltageValue
-                    );
-
-                    localStorage.setItem(
-                        "maxCurrentStat", maxCurrentValue
-                    );
-
-                    localStorage.setItem(
-                        "maxPowerStat", maxPowerValue
-                    );
-                    localStorage.setItem(
-                        "maxVoltageTime", maxVoltageTime
-                    );
-
-                    localStorage.setItem(
-                        "minVoltageTime", minVoltageTime
-                    );
-
-                    localStorage.setItem(
-                        "maxCurrentTime", maxCurrentTime
-                    );
-
-                    localStorage.setItem(
-                        "maxPowerTime", maxPowerTime
-                    );
 
                     // ================= GAUGE ================= //
 
@@ -2653,6 +2689,140 @@
 
             }
 
+            async function loadDailyStatistics() {
+
+                const table =
+                    document.getElementById("dailyStatisticTable");
+
+                table.innerHTML = "";
+
+                try {
+
+                    const response =
+                        await fetch(urlHistory);
+
+                    const history =
+                        await response.json();
+
+                    if (!history) return;
+
+                    Object.keys(history)
+                        .sort()
+                        .reverse()
+                        .forEach(date => {
+
+                            let maxVoltage = 0;
+                            let minVoltage = 9999;
+                            let maxCurrent = 0;
+                            let maxPower = 0;
+
+                            Object.values(history[date]).forEach(item => {
+
+                                const voltage =
+                                    parseFloat(item.tegangan || 0);
+
+                                const current =
+                                    parseFloat(item.arus || 0);
+
+                                const power =
+                                    parseFloat(item.daya || 0);
+
+                                if (voltage > maxVoltage)
+                                    maxVoltage = voltage;
+
+                                if (voltage < minVoltage)
+                                    minVoltage = voltage;
+
+                                if (current > maxCurrent)
+                                    maxCurrent = current;
+
+                                if (power > maxPower)
+                                    maxPower = power;
+
+                            });
+
+                            const row =
+                                table.insertRow();
+
+                            row.innerHTML = `
+
+                            <td>${date}</td>
+
+                            <td>${maxVoltage.toFixed(1)} V</td>
+
+                            <td>${minVoltage.toFixed(1)} V</td>
+
+                            <td>${maxCurrent.toFixed(2)} A</td>
+
+                            <td>${maxPower.toFixed(1)} W</td>
+
+                            ${adminMode ? `
+
+                            <td>
+
+                            <button
+                            onclick="deleteStatisticDay('${date}')"
+                            style="
+                            padding:8px 14px;
+                            border:none;
+                            border-radius:10px;
+                            background:#ef4444;
+                            color:white;
+                            cursor:pointer;
+                            font-weight:bold;
+                            ">
+
+                            🗑 Hapus
+
+                            </button>
+
+                            </td>
+
+                            `: ""}
+
+                            `;
+
+                        });
+
+                }
+
+                catch (error) {
+
+                    console.log(error);
+
+                }
+
+            }
+            async function deleteStatisticDay(date) {
+
+                if (!confirm("Hapus riwayat statistik tanggal " + date + " ?"))
+                    return;
+
+                try {
+
+                    await fetch(
+
+                        urlHistory + "/" + date + ".json",
+
+                        {
+
+                            method: "DELETE"
+
+                        });
+
+                    loadDailyHistory();
+
+                    loadDailyStatistics();
+
+                }
+
+                catch (error) {
+
+                    console.log(error);
+
+                }
+
+            }
             /* ================= PER JAM ================= */
 
             async function loadHourlyHistory(date) {
@@ -2937,15 +3107,18 @@
                 }
             }, 15000);
             loadSettings();
+            loadStatisticsFromHistory();
             loadAbnormalHistory();
             updateRealtimeData();
             loadDailyHistory();
+            loadDailyStatistics();
             loadDownloadDates();
 
             setInterval(() => {
 
                 updateRealtimeData();
-
+                loadStatisticsFromHistory();
+                loadDailyStatistics();
             }, 5000);
             /* ========================================================= */
             /* ================= RESET DATA ============================ */
