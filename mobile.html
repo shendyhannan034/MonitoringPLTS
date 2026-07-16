@@ -1292,7 +1292,6 @@
                 top: 100px;
             }
         }
-        
     </style>
 
 </head>
@@ -1582,7 +1581,7 @@
             <div class="stats-container">
 
                 <div class="stat-card"
-                    onclick="showStatTime(this)">
+                     onclick="showStatTime(this)">
                     <h3>Tegangan Max</h3>
 
                     <div id="maxVoltageStat" data-time="">
@@ -1601,7 +1600,7 @@
 
                 </div>
 
-                <div class="stat-card"onclick="showStatTime(this)">
+                <div class="stat-card" onclick="showStatTime(this)">
 
                     <h3>Arus Max</h3>
 
@@ -1611,7 +1610,7 @@
 
                 </div>
 
-                <div class="stat-card"onclick="showStatTime(this)">
+                <div class="stat-card" onclick="showStatTime(this)">
 
                     <h3>Daya Tertinggi</h3>
 
@@ -2390,13 +2389,12 @@
 
         const urlAdmin =
             "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/admin.json";
-
-        const urlAbnormal =
-            "https://monitoring-plts-8c113-default-rtdb.asia-southeast1.firebasedatabase.app/monitoring/abnormalHistory.json";
         /* ========================================================= */
         /* ================= REALTIME DATA ========================= */
         /* ========================================================= */
 
+        let historyCache = {};
+        let lastHistoryJSON = "";
         let lastPower = 0;
         let lastAbnormal = "";
 
@@ -2404,8 +2402,7 @@
 
             try {
 
-                const response = await fetch(urlHistory);
-                const history = await response.json();
+                const history = historyCache;
 
                 if (!history) return;
 
@@ -2490,6 +2487,145 @@
             catch (err) {
 
                 console.log(err);
+
+            }
+
+        }
+        let lastAbnormalJSON = "";
+        function loadAbnormalFromHistory() {
+            const abnormalJSON =
+                JSON.stringify(historyCache);
+
+            if (abnormalJSON === lastAbnormalJSON) {
+
+                return;
+
+            }
+
+            lastAbnormalJSON = abnormalJSON;
+            const table =
+                document.getElementById("abnormalTable");
+
+            table.innerHTML = "";
+
+            const minVoltage =
+                parseFloat(document.getElementById("minVoltage").value);
+
+            const maxVoltage =
+                parseFloat(document.getElementById("maxVoltage").value);
+
+            const maxCurrent =
+                parseFloat(document.getElementById("maxCurrent").value);
+
+            const abnormal = [];
+
+            Object.keys(historyCache)
+                .sort()
+                .reverse()
+                .forEach(date => {
+
+                    Object.entries(historyCache[date])
+                        .forEach(([time, item]) => {
+
+                            const voltage =
+                                parseFloat(item.tegangan || 0);
+
+                            const current =
+                                parseFloat(item.arus || 0);
+
+                            if (voltage < minVoltage) {
+
+                                abnormal.push({
+
+                                    waktu: date + " " + time,
+
+                                    parameter: "Tegangan",
+
+                                    nilai: voltage.toFixed(1) + " V",
+
+                                    status: "UNDER VOLTAGE"
+
+                                });
+
+                            }
+
+                            if (voltage > maxVoltage) {
+
+                                abnormal.push({
+
+                                    waktu: date + " " + time,
+
+                                    parameter: "Tegangan",
+
+                                    nilai: voltage.toFixed(1) + " V",
+
+                                    status: "OVER VOLTAGE"
+
+                                });
+
+                            }
+
+                            if (current > maxCurrent) {
+
+                                abnormal.push({
+
+                                    waktu: date + " " + time,
+
+                                    parameter: "Arus",
+
+                                    nilai: current.toFixed(2) + " A",
+
+                                    status: "OVER CURRENT"
+
+                                });
+
+                            }
+
+                        });
+
+                });
+
+            abnormal.reverse();
+
+            abnormal.forEach(item => {
+
+                const row =
+                    table.insertRow();
+
+                row.innerHTML = `
+
+                    <td>${item.waktu}</td>
+
+                    <td>${item.parameter}</td>
+
+                    <td>${item.nilai}</td>
+
+                    <td class="status-danger">
+
+                    ${item.status}
+
+                    </td>
+
+                    `;
+
+            });
+
+        }
+        async function loadHistoryCache() {
+
+            try {
+
+                const response =
+                    await fetch(urlHistory);
+
+                historyCache =
+                    await response.json() || {};
+
+            }
+
+            catch (error) {
+
+                console.log(error);
 
             }
 
@@ -2628,12 +2764,6 @@
 
                     if (lastAbnormal !== abnormalKey) {
 
-                        addAbnormal(
-                            "Tegangan",
-                            voltage.toFixed(1) + " V",
-                            "UNDER VOLTAGE"
-                        );
-
                         lastAbnormal = abnormalKey;
                     }
 
@@ -2654,12 +2784,6 @@
                         .style.display = "block";
 
                     if (lastAbnormal !== abnormalKey) {
-
-                        addAbnormal(
-                            "Tegangan",
-                            voltage.toFixed(1) + " V",
-                            "OVER VOLTAGE"
-                        );
 
                         lastAbnormal = abnormalKey;
 
@@ -2694,11 +2818,7 @@
                     document.getElementById("currentWarning")
                         .style.display = "block";
 
-                    addAbnormal(
-                        "Arus",
-                        current.toFixed(2) + " A",
-                        "OVER CURRENT"
-                    );
+
                 }
 
                 else {
@@ -2717,6 +2837,7 @@
 
                 document.getElementById('energyStatus')
                     .innerText = "MONITORING";
+
 
                 // ================= GAUGE ================= //
 
@@ -2824,110 +2945,16 @@
         /* ================= ABNORMAL HISTORY ====================== */
         /* ========================================================= */
 
-        async function addAbnormal(parameter, value, status) {
 
-            try {
-
-                const abnormalData = {
-
-                    waktu:
-                        new Date().toLocaleString(),
-
-                    parameter: parameter,
-
-                    nilai: value,
-
-                    status: status
-
-                };
-
-                await fetch(urlAbnormal, {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify(abnormalData)
-
-                });
-
-                loadAbnormalHistory();
-
-            }
-
-            catch (error) {
-
-                console.log(error);
-
-            }
-
-        }
-        async function loadAbnormalHistory() {
-
-            const table =
-                document.getElementById("abnormalTable");
-
-            table.innerHTML = "";
-
-            try {
-
-                const response =
-                    await fetch(urlAbnormal);
-
-                const data =
-                    await response.json();
-
-                if (!data) return;
-
-                Object.values(data)
-                    .reverse()
-                    .forEach(item => {
-
-                        const row =
-                            table.insertRow();
-
-                        row.innerHTML = `
-
-                    <td>
-                        ${item.waktu}
-                    </td>
-
-                    <td>
-                        ${item.parameter}
-                    </td>
-
-                    <td>
-                        ${item.nilai}
-                    </td>
-
-                    <td class="status-danger">
-                        ${item.status}
-                    </td>
-
-                `;
-
-                    });
-
-            }
-
-            catch (error) {
-
-                console.log(error);
-
-            }
-
-        }
 
         /* ========================================================= */
         /* ================= HISTORY FIREBASE ====================== */
         /* ========================================================= */
-
         let historyLevel = "daily";
         let selectedDate = "";
         let adminMode = false;
         /* ================= HARIAN ================= */
+
 
         async function loadDailyHistory() {
 
@@ -2939,6 +2966,14 @@
             document.getElementById("backButton")
                 .style.display = "none";
 
+            const newHistoryJSON = JSON.stringify(historyCache);
+
+            if (newHistoryJSON === lastHistoryJSON) {
+                return;
+            }
+
+            lastHistoryJSON = newHistoryJSON;
+
             const table =
                 document.getElementById("historyTable");
 
@@ -2946,11 +2981,7 @@
 
             try {
 
-                const response =
-                    await fetch(urlHistory);
-
-                const data =
-                    await response.json();
+                const data = historyCache;
 
                 if (!data) return;
 
@@ -3000,25 +3031,17 @@
 
                     row.innerHTML = `
 
-                                <td>${date}</td>
+                            <td>${date}</td>
 
-                                <td>
-                                    ${avgVoltage.toFixed(1)} V
-                                </td>
+                            <td>${avgVoltage.toFixed(1)} V</td>
 
-                                <td>
-                                    ${avgCurrent.toFixed(2)} A
-                                </td>
+                            <td>${avgCurrent.toFixed(2)} A </td>
 
-                                <td>
-                                    ${avgPower.toFixed(1)} W
-                                </td>
+                            <td>${avgPower.toFixed(1)} W</td>
 
-                                <td>
-                                   ${lastEnergy.toFixed(2)} kWh
-                                </td>
+                            <td>${lastEnergy.toFixed(2)} kWh</td>
 
-                             ${adminMode ? `
+                            ${adminMode ? `
 
                             <td>
 
@@ -3041,7 +3064,7 @@
                             </td>
 
                             ` : ""}
-                            `;
+                        `;
 
                     row.onclick = () => {
 
@@ -3065,16 +3088,10 @@
 
             const table =
                 document.getElementById("dailyStatisticTable");
-
             table.innerHTML = "";
 
             try {
-
-                const response =
-                    await fetch(urlHistory);
-
-                const history =
-                    await response.json();
+                const history = historyCache;
 
                 if (!history) return;
 
@@ -3118,41 +3135,41 @@
 
                         row.innerHTML = `
 
-                        <td>${date}</td>
+                            <td>${date}</td>
 
-                        <td>${maxVoltage.toFixed(1)} V</td>
+                            <td>${maxVoltage.toFixed(1)} V</td>
 
-                        <td>${minVoltage.toFixed(1)} V</td>
+                            <td>${minVoltage.toFixed(1)} V</td>
 
-                        <td>${maxCurrent.toFixed(2)} A</td>
+                            <td>${maxCurrent.toFixed(2)} A</td>
 
-                        <td>${maxPower.toFixed(1)} W</td>
+                            <td>${maxPower.toFixed(1)} W</td>
 
-                        ${adminMode ? `
+                            ${adminMode ? `
 
-                        <td>
+                            <td>
 
-                        <button
-                        onclick="deleteStatisticDay('${date}')"
-                        style="
-                        padding:8px 14px;
-                        border:none;
-                        border-radius:10px;
-                        background:#ef4444;
-                        color:white;
-                        cursor:pointer;
-                        font-weight:bold;
-                        ">
+                            <button
+                            onclick="deleteStatisticDay('${date}')"
+                            style="
+                            padding:8px 14px;
+                            border:none;
+                            border-radius:10px;
+                            background:#ef4444;
+                            color:white;
+                            cursor:pointer;
+                            font-weight:bold;
+                            ">
 
-                        🗑 Hapus
+                            🗑 Hapus
 
-                        </button>
+                            </button>
 
-                        </td>
+                            </td>
 
-                        `: ""}
+                            `: ""}
 
-                        `;
+                            `;
 
                     });
 
@@ -3214,11 +3231,7 @@
 
             try {
 
-                const response =
-                    await fetch(urlHistory);
-
-                const data =
-                    await response.json();
+                const data = historyCache;
 
                 if (!data || !data[date]) return;
 
@@ -3270,25 +3283,25 @@
 
                     row.innerHTML = `
 
-                                <td>${hour}:00</td>
+                            <td>${hour}:00</td>
 
-                                <td>
-                                    ${(item.voltage / item.count).toFixed(1)} V
-                                </td>
+                            <td>
+                                ${(item.voltage / item.count).toFixed(1)} V
+                            </td>
 
-                                <td>
-                                    ${(item.current / item.count).toFixed(2)} A
-                                </td>
+                            <td>
+                                ${(item.current / item.count).toFixed(2)} A
+                            </td>
 
-                                <td>
-                                    ${(item.power / item.count).toFixed(1)} W
-                                </td>
+                            <td>
+                                ${(item.power / item.count).toFixed(1)} W
+                            </td>
 
-                                <td>
-                                    ${item.energy.toFixed(2)} kWh
-                                </td>
+                            <td>
+                                ${item.energy.toFixed(2)} kWh
+                            </td>
 
-                            `;
+                        `;
 
                     row.onclick = () => {
 
@@ -3326,11 +3339,7 @@
 
             try {
 
-                const response =
-                    await fetch(urlHistory);
-
-                const data =
-                    await response.json();
+                const data = historyCache;
 
                 if (!data || !data[date]) return;
 
@@ -3349,25 +3358,25 @@
 
                         row.innerHTML = `
 
-                                    <td>${time}</td>
+                                <td>${time}</td>
 
-                                    <td>
-                                        ${item.tegangan} V
-                                    </td>
+                                <td>
+                                    ${item.tegangan} V
+                                </td>
 
-                                    <td>
-                                        ${item.arus} A
-                                    </td>
+                                <td>
+                                    ${item.arus} A
+                                </td>
 
-                                    <td>
-                                        ${item.daya} W
-                                    </td>
+                                <td>
+                                    ${item.daya} W
+                                </td>
 
-                                    <td>
-                                        ${item.energi} kWh
-                                    </td>
+                                <td>
+                                    ${item.energi} kWh
+                                </td>
 
-                                `;
+                            `;
 
                     }
 
@@ -3400,6 +3409,9 @@
             }
 
         }
+        // =====================================================
+        // =================== FUNGSI JAM ======================
+        // =====================================================
         function updateClock() {
 
             const now = new Date();
@@ -3468,25 +3480,42 @@
         /* ================= START ================================ */
         /* ========================================================= */
 
-        setInterval(() => {
+        async function initDashboard() {
 
-            if (historyLevel === "daily") {
+            await loadSettings();
 
-                loadDailyHistory();
-            }
-        }, 15000);
-        loadSettings();
-        loadStatisticsFromHistory();
-        loadAbnormalHistory();
-        updateRealtimeData();
-        loadDailyHistory();
-        loadDailyStatistics();
-        loadDownloadDates();
-        setInterval(() => {
+            await loadHistoryCache();
 
-            updateRealtimeData();
             loadStatisticsFromHistory();
+
+            loadAbnormalFromHistory();
+
+            await updateRealtimeData();
+
+            loadDailyHistory();
+
             loadDailyStatistics();
+
+            loadDownloadDates();
+
+        }
+
+        initDashboard();
+
+        setInterval(async () => {
+
+            await loadHistoryCache();
+
+            await updateRealtimeData();
+
+            loadStatisticsFromHistory();
+
+            loadDailyHistory();
+
+            loadDailyStatistics();
+
+            loadAbnormalFromHistory();
+
         }, 5000);
         /* ========================================================= */
         /* ================= RESET DATA ============================ */
@@ -3590,21 +3619,6 @@
             alert("Riwayat abnormal berhasil direset!");
 
         }
-        function showStatTime(card) {
-
-            const stat =
-                card.querySelector("div[id]");
-
-            if (!stat) return;
-
-            const time =
-                stat.dataset.time || "-";
-
-            alert(
-                "Data tercatat:\n\n" + time
-            );
-
-        }
 
         /* ================= LOADING SCREEN ================= */
 
@@ -3643,6 +3657,9 @@
                 });
 
         }, 4000);
+        // =====================================================
+        // =================== LOGIN ADMIN =====================
+        // =====================================================
         async function loginAdmin() {
 
             const username =
@@ -3721,6 +3738,7 @@
             }
 
         }
+        // ================ CLOSE LOGIN ===================
         function closeLogin() {
 
             document
@@ -3728,6 +3746,9 @@
                 .style.display = "none";
 
         }
+        // =====================================================
+        // ================= DOWNLOAD HISTORY ==================
+        // =====================================================
         async function downloadHistoryRange() {
 
             const startDate =
@@ -3762,9 +3783,7 @@
 
                 let csv = "";
 
-                // =====================================================
                 // ================= RIWAYAT HARIAN ====================
-                // =====================================================
 
                 csv += "===== RIWAYAT HARIAN =====\n\n";
 
@@ -3821,9 +3840,7 @@
 
                 });
 
-                // =====================================================
                 // ================= RIWAYAT PER JAM ===================
-                // =====================================================
 
                 csv += "\n\n===== RIWAYAT PER JAM =====\n\n";
 
@@ -3888,9 +3905,7 @@
 
                 });
 
-                // =====================================================
                 // ================= RIWAYAT 15 DETIK ==================
-                // =====================================================
 
                 csv += "\n\n===== RIWAYAT PER 15 DETIK =====\n\n";
 
@@ -3918,9 +3933,7 @@
 
                 });
 
-                // =====================================================
                 // ================= DOWNLOAD FILE =====================
-                // =====================================================
 
                 const blob =
                     new Blob([csv], {
@@ -3951,6 +3964,8 @@
             }
 
         }
+        // ================= TANGGAL DOWNLOAD ====================
+
         async function loadDownloadDates() {
 
             try {
@@ -3972,13 +3987,13 @@
                 // RESET OPTION
                 startSelect.innerHTML =
                     `<option value="">
-    Pilih Tanggal Awal
-</option>`;
+                Pilih Tanggal Awal
+            </option>`;
 
                 endSelect.innerHTML =
                     `<option value="">
-    Pilih Tanggal Akhir
-</option>`;
+                    Pilih Tanggal Akhir
+            </option>`;
 
                 // AMBIL TANGGAL
                 Object.keys(data)
@@ -3988,13 +4003,13 @@
 
                         startSelect.innerHTML +=
                             `<option value="${date}">
-        ${date}
-    </option>`;
+                                ${date}
+                            </option>`;
 
                         endSelect.innerHTML +=
                             `<option value="${date}">
-        ${date}
-    </option>`;
+                                ${date}
+                            </option>`;
 
                     });
 
@@ -4007,6 +4022,9 @@
             }
 
         }
+        // =====================================================
+        // ================= HAPUS HISTORY =====================
+        // =====================================================
         async function deleteHistoryDay(date) {
 
             const confirmDelete =
@@ -4051,6 +4069,9 @@
             }
 
         }
+        // =====================================================
+        // ================= START DASHBOARD ====================
+        // =====================================================
         function startDashboard() {
 
             // VIEW MODE
@@ -4082,7 +4103,9 @@
             showPage("realtime");
 
         }
-
+        // =====================================================
+        // ================ LOGOUT DASHBOARD ===================
+        // =====================================================
         function logoutDashboard() {
 
             // KEMBALI KE VIEW MODE
