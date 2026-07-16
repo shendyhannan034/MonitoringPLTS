@@ -2598,6 +2598,7 @@
             /* ================= HISTORY FIREBASE ====================== */
             /* ========================================================= */
             let historyLevel = "daily";
+            let selectedHour = "";
             let selectedDate = "";
             let adminMode = false;
             /* ================= HARIAN ================= */
@@ -2606,7 +2607,7 @@
             async function loadDailyHistory() {
 
                 historyLevel = "daily";
-
+               
                 document.getElementById("historyTitle")
                     .innerText = "Riwayat Harian";
 
@@ -2973,7 +2974,8 @@
             async function loadDetailHistory(date, hour) {
 
                 historyLevel = "detail";
-
+                selectedDate = date;
+                selectedHour = hour;
                 document.getElementById("historyTitle")
                     .innerText = `Riwayat Per 15 Detik (${date} | ${hour}:00)`;
                 document.getElementById("backButton")
@@ -3157,7 +3159,21 @@
 
                 loadStatisticsFromHistory();
 
-                loadDailyHistory();
+                if (historyLevel === "daily") {
+
+                    loadDailyHistory();
+
+                }
+                else if (historyLevel === "hourly") {
+
+                    loadHourlyHistory(selectedDate);
+
+                }
+                else if (historyLevel === "detail") {
+
+                    loadDetailHistory(selectedDate, selectedHour);
+
+                }
 
                 loadDailyStatistics();
 
