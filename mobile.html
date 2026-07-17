@@ -3409,14 +3409,14 @@
 
         function goBack() {
 
-            if (historyLevel == "detail") {
+            if (historyLevel === "detail") {
 
                 loadHourlyHistory(selectedDate);
 
             }
+            else if (historyLevel === "hourly") {
 
-            else if (historyLevel == "hourly") {
-
+                lastHistoryJSON = "";      // tambahkan ini
                 loadDailyHistory();
 
             }
